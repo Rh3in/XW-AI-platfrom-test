@@ -402,6 +402,7 @@ const chartTypes = [
 const main = document.querySelector("#main");
 const chatView = document.querySelector("#chatView");
 const workspace = document.querySelector("#workspace");
+const historyList = document.querySelector("#historyList");
 const searchPanel = document.querySelector("#searchPanel");
 const searchResults = document.querySelector("#searchResults");
 const form = document.querySelector("#composerForm");
@@ -412,6 +413,15 @@ const newChat = document.querySelector("#newChat");
 let currentAnswer = null;
 let turnSeed = 1;
 const conversationTurns = [];
+const historyStorageKey = "aiDataConversationHistory";
+const historyLimit = 20;
+const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((item, index) => ({
+  id: `built-in-${index}`,
+  query: item.dataset.query,
+  title: item.textContent.trim(),
+  builtIn: true,
+}));
+let userHistory = loadUserHistory();
 
 function escapeHtml(value) {
   return String(value)
@@ -420,6 +430,69 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function loadUserHistory() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(historyStorageKey) || "[]");
+    return Array.isArray(parsed)
+      ? parsed
+          .filter((item) => item && typeof item.query === "string" && item.query.trim())
+          .map((item, index) => ({
+            id: item.id || `saved-${Date.now()}-${index}`,
+            query: item.query.trim(),
+            title: (item.title || item.query).trim(),
+            answerId: item.answerId || "",
+            createdAt: item.createdAt || "",
+          }))
+          .slice(0, historyLimit)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveUserHistory() {
+  try {
+    localStorage.setItem(historyStorageKey, JSON.stringify(userHistory));
+  } catch {
+    // Local storage can be unavailable in private or restricted browser modes.
+  }
+}
+
+function historyIcon() {
+  return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>`;
+}
+
+function renderHistoryList() {
+  const records = [...userHistory, ...builtInHistory];
+  historyList.innerHTML = records
+    .map((record) => `
+      <a href="#" class="history-item ${record.builtIn ? "" : "history-item-new"}" data-query="${escapeHtml(record.query)}" data-history-answer-id="${escapeHtml(record.answerId || "")}" title="${escapeHtml(record.query)}">
+        ${historyIcon()}
+        <span>${escapeHtml(record.title)}</span>
+      </a>
+    `)
+    .join("");
+}
+
+function addHistoryRecord(query, answer) {
+  const text = query.trim();
+  if (!text) return;
+
+  const existingIndex = userHistory.findIndex((item) => item.query === text);
+  if (existingIndex >= 0) userHistory.splice(existingIndex, 1);
+
+  userHistory.unshift({
+    id: `user-${Date.now()}`,
+    query: text,
+    title: text,
+    answerId: answer?.id || "",
+    createdAt: new Date().toISOString(),
+  });
+  userHistory = userHistory.slice(0, historyLimit);
+  saveUserHistory();
+  renderHistoryList();
 }
 
 function scoreAnswer(answer, query) {
@@ -470,7 +543,7 @@ function renderSearch(query) {
     .join("");
 }
 
-function renderAnswer(answer, questionText = answer.title, override = null) {
+function renderAnswer(answer, questionText = answer.title, override = null, options = {}) {
   currentAnswer = answer;
   const activeChart = override?.chart || answer.defaultChart || "bar";
   conversationTurns.push({
@@ -484,6 +557,7 @@ function renderAnswer(answer, questionText = answer.title, override = null) {
   main.classList.add("has-answer");
   workspace.classList.add("is-answering");
   searchPanel.hidden = true;
+  if (options.addToHistory !== false) addHistoryRecord(questionText, answer);
   renderConversation();
 
   input.value = "";
@@ -849,13 +923,14 @@ chatView.addEventListener("click", (event) => {
   }
 });
 
-document.querySelectorAll("[data-query]").forEach((item) => {
-  item.addEventListener("click", (event) => {
-    event.preventDefault();
-    const query = item.dataset.query;
-    const answer = getMatches(query)[0] || answers[0];
-    renderAnswer(answer, query);
-  });
+historyList.addEventListener("click", (event) => {
+  const item = event.target.closest("[data-query]");
+  if (!item) return;
+  event.preventDefault();
+  const query = item.dataset.query;
+  const savedAnswer = answers.find((answer) => answer.id === item.dataset.historyAnswerId);
+  const answer = savedAnswer || getMatches(query)[0] || answers[0];
+  renderAnswer(answer, query, null, { addToHistory: false });
 });
 
 newChat.addEventListener("click", () => {
@@ -871,4 +946,5 @@ newChat.addEventListener("click", () => {
   input.focus();
 });
 
+renderHistoryList();
 updateSendState();
