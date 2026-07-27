@@ -321,8 +321,9 @@ svg {
 }
 
 .history {
-  border-top: 1px solid var(--line);
-  padding: 18px 10px 0;
+  height: calc(100% - 118px);
+  padding: 0 10px 0;
+  overflow: hidden;
 }
 
 .history header {
@@ -360,6 +361,15 @@ svg {
 .history-item {
   min-height: 38px;
   color: #5c6675;
+}
+
+.history-list {
+  height: calc(100% - 35px);
+  display: grid;
+  align-content: start;
+  gap: 1px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .history-item svg {
@@ -764,7 +774,7 @@ svg {
 .chart-tabs {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 .chart-tab,
@@ -792,9 +802,50 @@ svg {
 }
 
 .chart-body {
-  height: 268px;
+  height: 286px;
   padding: 22px 22px 18px 20px;
   background: #ffffff;
+}
+
+.metric-grid {
+  margin: 18px 0 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-card {
+  min-height: 74px;
+  padding: 12px 13px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  background: #f8fbff;
+  border: 1px solid #e7edf6;
+  border-radius: 7px;
+}
+
+.metric-card span {
+  color: #667085;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.metric-card strong {
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 26px;
+}
+
+.metric-card em {
+  min-width: 0;
+  overflow: hidden;
+  color: #7a8494;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bar-chart {
@@ -854,9 +905,9 @@ svg {
 .bars {
   height: 100%;
   display: grid;
-  grid-template-columns: repeat(12, minmax(28px, 1fr));
+  grid-template-columns: repeat(var(--items, 12), minmax(24px, 1fr));
   align-items: end;
-  gap: 19px;
+  gap: clamp(8px, 1.15vw, 19px);
   padding: 0 15px;
   position: relative;
   z-index: 1;
@@ -908,6 +959,11 @@ svg {
   fill: none;
   stroke: var(--blue);
   stroke-width: 3;
+}
+
+.area-fill {
+  fill: rgba(8, 119, 255, 0.12);
+  stroke: none;
 }
 
 .line-dot {
@@ -964,6 +1020,67 @@ svg {
 .pie-legend strong {
   color: #111827;
   font-weight: 600;
+}
+
+.radar-chart {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.radar-chart svg {
+  width: 250px;
+  height: 250px;
+  justify-self: center;
+}
+
+.radar-grid circle,
+.radar-grid line {
+  fill: none;
+  stroke: #dfe6f0;
+  stroke-width: 1;
+}
+
+.radar-grid text {
+  fill: #667085;
+  font-size: 11px;
+}
+
+.radar-area {
+  fill: rgba(8, 119, 255, 0.16);
+  stroke: #0877ff;
+  stroke-width: 2.5;
+}
+
+.radar-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+.radar-legend div {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #344054;
+  font-size: 13px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.radar-legend span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radar-legend strong {
+  color: #0f172a;
+  font-size: 15px;
 }
 
 .data-table {
@@ -1115,6 +1232,10 @@ svg {
   .meta-row {
     gap: 10px 18px;
   }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 600px) {
@@ -1203,6 +1324,20 @@ svg {
   .pie-chart {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .radar-chart {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .radar-chart svg {
+    width: 210px;
+    height: 210px;
+  }
+
+  .radar-legend {
+    grid-template-columns: 1fr;
   }
 
   .pie {
