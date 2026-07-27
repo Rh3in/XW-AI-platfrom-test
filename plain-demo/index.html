@@ -3,15 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>智能数据 Demo - 朴素版</title>
-    <link rel="stylesheet" href="./styles.css?v=20260727-plain-1" />
+    <title>社区数据问答台</title>
+    <link rel="stylesheet" href="./styles.css?v=20260727-community-1" />
   </head>
   <body>
     <div class="app">
+      <header class="site-header">
+        <div class="site-title">
+          <span>开放样例</span>
+          <strong>社区数据问答台</strong>
+        </div>
+        <div class="site-meta">
+          <span>公共服务</span>
+          <span>可视化问答</span>
+          <span>示例环境</span>
+        </div>
+      </header>
+
       <aside class="panel" aria-label="历史对话">
         <header class="panel-header">
-          <strong>AI+ 智能数据</strong>
-          <span>朴素版</span>
+          <strong>样例题库</strong>
+          <span>8 组主题</span>
         </header>
 
         <button class="new-chat" id="newChat" type="button">新建对话</button>
@@ -22,23 +34,35 @@
             <a href="#">更多</a>
           </header>
           <div class="history-list" id="historyList">
-            <a href="#" class="history-item" data-query="下一年技术部门编制缺口预测">下一年技术部门编制缺口</a>
-            <a href="#" class="history-item" data-query="2024财务收入报表统计">2024财务收入报表统计</a>
-            <a href="#" class="history-item" data-query="销售目标完成率预测">销售目标完成率预测</a>
-            <a href="#" class="history-item" data-query="客户流失风险分层">客户流失风险分层</a>
-            <a href="#" class="history-item" data-query="库存周转与缺货预警">库存周转与缺货预警</a>
-            <a href="#" class="history-item" data-query="营销漏斗转化分析">营销漏斗转化分析</a>
-            <a href="#" class="history-item" data-query="客服工单SLA趋势">客服工单SLA趋势</a>
-            <a href="#" class="history-item" data-query="预算成本偏差分析">预算成本偏差分析</a>
+            <a href="#" class="history-item" data-query="本周公园客流高峰预测" data-history-answer-id="park-flow">本周公园客流高峰预测</a>
+            <a href="#" class="history-item" data-query="社区图书借阅偏好分析" data-history-answer-id="library-reading">社区图书借阅偏好分析</a>
+            <a href="#" class="history-item" data-query="夜间公交准点率观察" data-history-answer-id="bus-punctuality">夜间公交准点率观察</a>
+            <a href="#" class="history-item" data-query="垃圾分类参与度追踪" data-history-answer-id="waste-sorting">垃圾分类参与度追踪</a>
+            <a href="#" class="history-item" data-query="河道水质巡检异常说明" data-history-answer-id="river-quality">河道水质巡检异常说明</a>
+            <a href="#" class="history-item" data-query="博物馆预约热度分布" data-history-answer-id="museum-booking">博物馆预约热度分布</a>
+            <a href="#" class="history-item" data-query="高温天气关怀人群排查" data-history-answer-id="heat-care">高温天气关怀人群排查</a>
+            <a href="#" class="history-item" data-query="自行车道拥堵点位评估" data-history-answer-id="bike-lane">自行车道拥堵点位评估</a>
           </div>
         </section>
       </aside>
 
       <main class="main" id="main">
-        <h1>智能数据</h1>
+        <section class="main-heading">
+          <div>
+            <span>问答工作台</span>
+            <h1>公共服务数据观察</h1>
+          </div>
+          <p>社区、交通、场馆、环境与关怀主题</p>
+        </section>
 
-        <section class="greeting" id="greeting" aria-label="欢迎语">
-          <div class="greet-bubble">您好，请输入问题或选择左侧历史对话。</div>
+        <section class="greeting" id="greeting" aria-label="欢迎">
+          <div class="greet-bubble">今天关注哪一组公共数据？</div>
+          <div class="starter-grid" aria-hidden="true">
+            <span>公园客流</span>
+            <span>夜间公交</span>
+            <span>水质巡检</span>
+            <span>社区关怀</span>
+          </div>
         </section>
 
         <section class="chat-view" id="chatView" aria-live="polite"></section>
@@ -46,22 +70,22 @@
         <section class="workspace" id="workspace" aria-label="对话区">
           <div class="search-panel" id="searchPanel" hidden>
             <header>
-              <span>相关问题</span>
-              <small>选择一个问题开始分析</small>
+              <span>相关主题</span>
+              <small>匹配到的样例</small>
             </header>
             <div class="search-results" id="searchResults"></div>
           </div>
 
           <form class="composer" id="composerForm">
-            <textarea id="questionInput" aria-label="输入您的问题" placeholder="请输入您的问题"></textarea>
+            <textarea id="questionInput" aria-label="输入问题" placeholder="输入问题或关键词"></textarea>
             <div class="composer-footer">
               <div class="mode-group">
-                <button type="button" class="pill active-pill">深度思考</button>
-                <button type="button" class="pill">分享管理</button>
+                <button type="button" class="pill active-pill">分析</button>
+                <button type="button" class="pill">记录</button>
               </div>
               <div class="action-group">
-                <button type="button" class="icon-button" title="添加附件" aria-label="添加附件">附件</button>
-                <button type="button" class="icon-button" title="语音输入" aria-label="语音输入">语音</button>
+                <button type="button" class="icon-button" title="附件" aria-label="附件">附件</button>
+                <button type="button" class="icon-button" title="语音" aria-label="语音">语音</button>
                 <button type="submit" class="send" id="sendButton" title="发送" aria-label="发送">发送</button>
               </div>
             </div>
@@ -71,8 +95,9 @@
     </div>
 
     <script>
-      window.aiDemoStorageKey = "plainAiDataConversationHistory";
+      window.aiDemoStorageKey = "communityDataConversationHistory";
     </script>
-    <script src="../script.js?v=20260727-plain-1"></script>
+    <script src="./content.js?v=20260727-community-1"></script>
+    <script src="../script.js?v=20260727-community-1"></script>
   </body>
 </html>

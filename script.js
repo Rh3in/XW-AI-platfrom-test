@@ -1,4 +1,4 @@
-const answers = [
+const defaultAnswers = [
   {
     id: "pipeline-gap",
     title: "下一年技术部门编制缺口预测 (基于项目Pipeline)",
@@ -390,6 +390,8 @@ const answers = [
   },
 ];
 
+const answers = Array.isArray(window.aiDemoAnswers) && window.aiDemoAnswers.length ? window.aiDemoAnswers : defaultAnswers;
+
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
   { type: "bar", label: "柱状图", icon: "M6 19V9M12 19V5M18 19v-8" },
@@ -420,6 +422,7 @@ const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((it
   id: `built-in-${index}`,
   query: item.dataset.query,
   title: item.textContent.trim(),
+  answerId: item.dataset.historyAnswerId || "",
   builtIn: true,
 }));
 let userHistory = loadUserHistory();
