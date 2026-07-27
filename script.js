@@ -414,7 +414,7 @@ let currentAnswer = null;
 let turnSeed = 1;
 let selectedHistoryId = "";
 const conversationTurns = [];
-const historyStorageKey = "aiDataConversationHistory";
+const historyStorageKey = window.aiDemoStorageKey || "aiDataConversationHistory";
 const historyLimit = 20;
 const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((item, index) => ({
   id: `built-in-${index}`,
@@ -471,7 +471,7 @@ function renderHistoryList() {
     .map((record) => `
       <a href="#" class="history-item ${record.builtIn ? "" : "history-item-new"} ${selectedHistoryId === record.id ? "active" : ""}" data-history-id="${escapeHtml(record.id)}" data-query="${escapeHtml(record.query)}" data-history-answer-id="${escapeHtml(record.answerId || "")}" title="${escapeHtml(record.query)}">
         ${historyIcon()}
-        <span>${escapeHtml(record.title)}</span>
+        <span class="history-title">${escapeHtml(record.title)}</span>
       </a>
     `)
     .join("");

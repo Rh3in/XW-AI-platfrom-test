@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能数据 Demo - 朴素版</title>
+    <link rel="stylesheet" href="./styles.css?v=20260727-plain-1" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="panel" aria-label="历史对话">
+        <header class="panel-header">
+          <strong>AI+ 智能数据</strong>
+          <span>朴素版</span>
+        </header>
+
+        <button class="new-chat" id="newChat" type="button">新建对话</button>
+
+        <section class="history">
+          <header>
+            <span>历史对话</span>
+            <a href="#">更多</a>
+          </header>
+          <div class="history-list" id="historyList">
+            <a href="#" class="history-item" data-query="下一年技术部门编制缺口预测">下一年技术部门编制缺口</a>
+            <a href="#" class="history-item" data-query="2024财务收入报表统计">2024财务收入报表统计</a>
+            <a href="#" class="history-item" data-query="销售目标完成率预测">销售目标完成率预测</a>
+            <a href="#" class="history-item" data-query="客户流失风险分层">客户流失风险分层</a>
+            <a href="#" class="history-item" data-query="库存周转与缺货预警">库存周转与缺货预警</a>
+            <a href="#" class="history-item" data-query="营销漏斗转化分析">营销漏斗转化分析</a>
+            <a href="#" class="history-item" data-query="客服工单SLA趋势">客服工单SLA趋势</a>
+            <a href="#" class="history-item" data-query="预算成本偏差分析">预算成本偏差分析</a>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main" id="main">
+        <h1>智能数据</h1>
+
+        <section class="greeting" id="greeting" aria-label="欢迎语">
+          <div class="greet-bubble">您好，请输入问题或选择左侧历史对话。</div>
+        </section>
+
+        <section class="chat-view" id="chatView" aria-live="polite"></section>
+
+        <section class="workspace" id="workspace" aria-label="对话区">
+          <div class="search-panel" id="searchPanel" hidden>
+            <header>
+              <span>相关问题</span>
+              <small>选择一个问题开始分析</small>
+            </header>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+
+          <form class="composer" id="composerForm">
+            <textarea id="questionInput" aria-label="输入您的问题" placeholder="请输入您的问题"></textarea>
+            <div class="composer-footer">
+              <div class="mode-group">
+                <button type="button" class="pill active-pill">深度思考</button>
+                <button type="button" class="pill">分享管理</button>
+              </div>
+              <div class="action-group">
+                <button type="button" class="icon-button" title="添加附件" aria-label="添加附件">附件</button>
+                <button type="button" class="icon-button" title="语音输入" aria-label="语音输入">语音</button>
+                <button type="submit" class="send" id="sendButton" title="发送" aria-label="发送">发送</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      window.aiDemoStorageKey = "plainAiDataConversationHistory";
+    </script>
+    <script src="../script.js?v=20260727-plain-1"></script>
+  </body>
+</html>
