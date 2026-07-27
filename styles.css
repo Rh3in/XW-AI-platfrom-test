@@ -370,15 +370,6 @@ svg {
   white-space: nowrap;
 }
 
-.history-item-new {
-  color: #253246;
-  background: #f7faff;
-}
-
-.history-item-new svg {
-  color: var(--blue);
-}
-
 .history-list {
   height: calc(100% - 35px);
   display: grid;

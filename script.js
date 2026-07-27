@@ -546,6 +546,7 @@ function renderSearch(query) {
 function renderAnswer(answer, questionText = answer.title, override = null, options = {}) {
   currentAnswer = answer;
   const activeChart = override?.chart || answer.defaultChart || "bar";
+  const isFirstTurn = conversationTurns.length === 0;
   conversationTurns.push({
     id: `turn-${turnSeed++}`,
     answer,
@@ -557,7 +558,7 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   main.classList.add("has-answer");
   workspace.classList.add("is-answering");
   searchPanel.hidden = true;
-  if (options.addToHistory !== false) addHistoryRecord(questionText, answer);
+  if (options.addToHistory !== false && isFirstTurn) addHistoryRecord(questionText, answer);
   renderConversation();
 
   input.value = "";
