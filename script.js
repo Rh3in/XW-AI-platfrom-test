@@ -412,6 +412,7 @@ const newChat = document.querySelector("#newChat");
 
 let currentAnswer = null;
 let turnSeed = 1;
+let selectedHistoryId = "";
 const conversationTurns = [];
 const historyStorageKey = "aiDataConversationHistory";
 const historyLimit = 20;
@@ -468,7 +469,7 @@ function renderHistoryList() {
   const records = [...userHistory, ...builtInHistory];
   historyList.innerHTML = records
     .map((record) => `
-      <a href="#" class="history-item ${record.builtIn ? "" : "history-item-new"}" data-query="${escapeHtml(record.query)}" data-history-answer-id="${escapeHtml(record.answerId || "")}" title="${escapeHtml(record.query)}">
+      <a href="#" class="history-item ${record.builtIn ? "" : "history-item-new"} ${selectedHistoryId === record.id ? "active" : ""}" data-history-id="${escapeHtml(record.id)}" data-query="${escapeHtml(record.query)}" data-history-answer-id="${escapeHtml(record.answerId || "")}" title="${escapeHtml(record.query)}">
         ${historyIcon()}
         <span>${escapeHtml(record.title)}</span>
       </a>
@@ -483,14 +484,16 @@ function addHistoryRecord(query, answer) {
   const existingIndex = userHistory.findIndex((item) => item.query === text);
   if (existingIndex >= 0) userHistory.splice(existingIndex, 1);
 
-  userHistory.unshift({
+  const record = {
     id: `user-${Date.now()}`,
     query: text,
     title: text,
     answerId: answer?.id || "",
     createdAt: new Date().toISOString(),
-  });
+  };
+  userHistory.unshift(record);
   userHistory = userHistory.slice(0, historyLimit);
+  selectedHistoryId = record.id;
   saveUserHistory();
   renderHistoryList();
 }
@@ -544,6 +547,11 @@ function renderSearch(query) {
 }
 
 function renderAnswer(answer, questionText = answer.title, override = null, options = {}) {
+  if (options.replaceConversation) {
+    conversationTurns.length = 0;
+    turnSeed = 1;
+  }
+
   currentAnswer = answer;
   const activeChart = override?.chart || answer.defaultChart || "bar";
   const isFirstTurn = conversationTurns.length === 0;
@@ -559,6 +567,10 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   workspace.classList.add("is-answering");
   searchPanel.hidden = true;
   if (options.addToHistory !== false && isFirstTurn) addHistoryRecord(questionText, answer);
+  if (options.selectedHistoryId !== undefined) {
+    selectedHistoryId = options.selectedHistoryId;
+    renderHistoryList();
+  }
   renderConversation();
 
   input.value = "";
@@ -931,7 +943,11 @@ historyList.addEventListener("click", (event) => {
   const query = item.dataset.query;
   const savedAnswer = answers.find((answer) => answer.id === item.dataset.historyAnswerId);
   const answer = savedAnswer || getMatches(query)[0] || answers[0];
-  renderAnswer(answer, query, null, { addToHistory: false });
+  renderAnswer(answer, query, null, {
+    addToHistory: false,
+    replaceConversation: true,
+    selectedHistoryId: item.dataset.historyId,
+  });
 });
 
 newChat.addEventListener("click", () => {
@@ -943,6 +959,8 @@ newChat.addEventListener("click", () => {
   searchPanel.hidden = true;
   currentAnswer = null;
   turnSeed = 1;
+  selectedHistoryId = "";
+  renderHistoryList();
   updateSendState();
   input.focus();
 });

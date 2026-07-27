@@ -388,6 +388,15 @@ svg {
   background: #f4f6fa;
 }
 
+.history-item.active {
+  color: #202938;
+  background: #eef0f5;
+}
+
+.history-item.active svg {
+  color: #1f2937;
+}
+
 .main {
   min-width: 0;
   flex: 1;
