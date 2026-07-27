@@ -465,6 +465,10 @@ function saveUserHistory() {
 }
 
 function historyIcon() {
+  if (typeof window.aiDemoHistoryIcon === "string" && window.aiDemoHistoryIcon.trim()) {
+    return window.aiDemoHistoryIcon;
+  }
+
   return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>`;
 }
 

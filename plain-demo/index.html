@@ -3,76 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>社区数据问答台</title>
-    <link rel="stylesheet" href="./styles.css?v=20260727-community-1" />
+    <title>智能问数</title>
+    <link rel="stylesheet" href="./styles.css?v=20260727-bdata-1" />
   </head>
   <body>
     <div class="app">
       <header class="site-header">
-        <div class="site-title">
-          <span>开放样例</span>
-          <strong>社区数据问答台</strong>
-        </div>
-        <div class="site-meta">
-          <span>公共服务</span>
-          <span>可视化问答</span>
-          <span>示例环境</span>
-        </div>
+        <strong>智能问数</strong>
       </header>
 
       <aside class="panel" aria-label="历史对话">
-        <header class="panel-header">
-          <strong>样例题库</strong>
-          <span>8 组主题</span>
-        </header>
-
         <button class="new-chat" id="newChat" type="button">新建对话</button>
 
         <section class="history">
-          <header>
-            <span>历史对话</span>
-            <a href="#">更多</a>
-          </header>
           <div class="history-list" id="historyList">
-            <a href="#" class="history-item" data-query="本周公园客流高峰预测" data-history-answer-id="park-flow">本周公园客流高峰预测</a>
-            <a href="#" class="history-item" data-query="社区图书借阅偏好分析" data-history-answer-id="library-reading">社区图书借阅偏好分析</a>
-            <a href="#" class="history-item" data-query="夜间公交准点率观察" data-history-answer-id="bus-punctuality">夜间公交准点率观察</a>
-            <a href="#" class="history-item" data-query="垃圾分类参与度追踪" data-history-answer-id="waste-sorting">垃圾分类参与度追踪</a>
-            <a href="#" class="history-item" data-query="河道水质巡检异常说明" data-history-answer-id="river-quality">河道水质巡检异常说明</a>
-            <a href="#" class="history-item" data-query="博物馆预约热度分布" data-history-answer-id="museum-booking">博物馆预约热度分布</a>
-            <a href="#" class="history-item" data-query="高温天气关怀人群排查" data-history-answer-id="heat-care">高温天气关怀人群排查</a>
-            <a href="#" class="history-item" data-query="自行车道拥堵点位评估" data-history-answer-id="bike-lane">自行车道拥堵点位评估</a>
+            <a href="#" class="history-item" data-query="经营看板本月关键指标解读" data-history-answer-id="ops-dashboard">经营看板本月关键指标解读</a>
+            <a href="#" class="history-item" data-query="应收账款逾期风险分析" data-history-answer-id="ar-risk">应收账款逾期风险分析</a>
+            <a href="#" class="history-item" data-query="采购交付准时率波动原因" data-history-answer-id="purchase-otd">采购交付准时率波动原因</a>
+            <a href="#" class="history-item" data-query="生产良率异常批次追踪" data-history-answer-id="yield-trace">生产良率异常批次追踪</a>
+            <a href="#" class="history-item" data-query="库存周转天数结构拆解" data-history-answer-id="stock-turnover">库存周转天数结构拆解</a>
+            <a href="#" class="history-item" data-query="合同履约进度风险预警" data-history-answer-id="contract-risk">合同履约进度风险预警</a>
+            <a href="#" class="history-item" data-query="售后工单处理效率对比" data-history-answer-id="ticket-efficiency">售后工单处理效率对比</a>
+            <a href="#" class="history-item" data-query="部门人效投入产出分析" data-history-answer-id="people-efficiency">部门人效投入产出分析</a>
           </div>
         </section>
       </aside>
 
       <main class="main" id="main">
-        <section class="main-heading">
-          <div>
-            <span>问答工作台</span>
-            <h1>公共服务数据观察</h1>
-          </div>
-          <p>社区、交通、场馆、环境与关怀主题</p>
-        </section>
-
-        <section class="greeting" id="greeting" aria-label="欢迎">
-          <div class="greet-bubble">今天关注哪一组公共数据？</div>
-          <div class="starter-grid" aria-hidden="true">
-            <span>公园客流</span>
-            <span>夜间公交</span>
-            <span>水质巡检</span>
-            <span>社区关怀</span>
-          </div>
-        </section>
+        <section class="greeting" id="greeting" aria-label="欢迎"></section>
 
         <section class="chat-view" id="chatView" aria-live="polite"></section>
 
         <section class="workspace" id="workspace" aria-label="对话区">
           <div class="search-panel" id="searchPanel" hidden>
-            <header>
-              <span>相关主题</span>
-              <small>匹配到的样例</small>
-            </header>
             <div class="search-results" id="searchResults"></div>
           </div>
 
@@ -95,9 +58,10 @@
     </div>
 
     <script>
-      window.aiDemoStorageKey = "communityDataConversationHistory";
+      window.aiDemoStorageKey = "bDataConversationHistory";
+      window.aiDemoHistoryIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M7 4v15M17 4v15M4 18.5h16" /><path d="M9.5 9.5h5M9.5 13h5" /></svg>';
     </script>
-    <script src="./content.js?v=20260727-community-1"></script>
-    <script src="../script.js?v=20260727-community-1"></script>
+    <script src="./content.js?v=20260727-bdata-1"></script>
+    <script src="../script.js?v=20260727-bdata-1"></script>
   </body>
 </html>
