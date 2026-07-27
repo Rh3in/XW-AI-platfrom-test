@@ -1463,3 +1463,79 @@ body {
 .guess-item:hover {
   background: #f7f9fc;
 }
+
+/* Fixed mixed data display */
+.chart-card-static {
+  display: grid;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+}
+
+.static-chart-block {
+  background: #ffffff;
+}
+
+.static-chart-bar .chart-body {
+  height: 260px;
+  padding: 10px 0 4px;
+}
+
+.static-chart-pie .chart-body {
+  height: 230px;
+  padding: 8px 0;
+}
+
+.static-chart-pie .pie-chart {
+  grid-template-columns: 220px 1fr;
+}
+
+.static-chart-table .chart-body {
+  height: auto;
+  padding: 0;
+}
+
+.static-chart-table .data-table {
+  height: auto;
+  padding: 0;
+}
+
+.static-chart-table .data-table table {
+  font-size: 13px;
+}
+
+.static-chart-table .data-table th,
+.static-chart-table .data-table td {
+  padding: 8px 10px;
+  border-color: #e1e7f0;
+}
+
+.static-chart-table .data-table th {
+  color: #344054;
+  background: #f7f9fc;
+}
+
+.guess-panel {
+  border-top: 0;
+}
+
+.guess-list {
+  border: 0;
+}
+
+.guess-item {
+  min-height: 34px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+}
+
+.guess-item:hover {
+  background: #f5f8fc;
+}
+
+@media (max-width: 900px) {
+  .static-chart-pie .pie-chart {
+    grid-template-columns: 1fr;
+  }
+}

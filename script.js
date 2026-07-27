@@ -392,7 +392,11 @@ const defaultAnswers = [
 
 const answers = Array.isArray(window.aiDemoAnswers) && window.aiDemoAnswers.length ? window.aiDemoAnswers : defaultAnswers;
 const demoFixedChartType = typeof window.aiDemoFixedChartType === "string" ? window.aiDemoFixedChartType : "";
+const demoStaticChartTypes = Array.isArray(window.aiDemoStaticChartTypes) ? window.aiDemoStaticChartTypes.filter(Boolean) : [];
 const demoShowMetricCards = window.aiDemoShowMetricCards !== false;
+const demoQuestionTitle = typeof window.aiDemoQuestionTitle === "string" && window.aiDemoQuestionTitle.trim()
+  ? window.aiDemoQuestionTitle.trim()
+  : "猜你想问";
 
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
@@ -562,7 +566,7 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   }
 
   currentAnswer = answer;
-  const activeChart = demoFixedChartType || override?.chart || answer.defaultChart || "bar";
+  const activeChart = demoStaticChartTypes[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
   const isFirstTurn = conversationTurns.length === 0;
   conversationTurns.push({
     id: `turn-${turnSeed++}`,
@@ -594,7 +598,17 @@ function renderConversation() {
 function renderTurn(turn) {
   const { answer, questionText, override, chartType } = turn;
   const metricsMarkup = demoShowMetricCards ? renderMetricCards(answer.chartData) : "";
-  const chartMarkup = demoFixedChartType
+  const chartMarkup = demoStaticChartTypes.length
+    ? `
+        <section class="chart-card chart-card-static" data-chart-card>
+          ${demoStaticChartTypes.map((type) => `
+            <div class="static-chart-block static-chart-${escapeHtml(type)}">
+              <div class="chart-body" data-chart-body>${renderChart(type, answer.chartData)}</div>
+            </div>
+          `).join("")}
+        </section>
+      `
+    : demoFixedChartType
     ? `
         <section class="chart-card chart-card-single" data-chart-card>
           <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
@@ -633,8 +647,8 @@ function renderTurn(turn) {
         ${metricsMarkup}
         <h3>四、${escapeHtml(answer.chartTitle)}</h3>
         ${chartMarkup}
-        <section class="guess-panel" aria-label="猜你想问">
-          <header>猜你想问</header>
+        <section class="guess-panel" aria-label="${escapeHtml(demoQuestionTitle)}">
+          <header>${escapeHtml(demoQuestionTitle)}</header>
           <div class="guess-list">
             ${answer.guesses.map((item, index) => `
               <button type="button" class="guess-item" data-guess-index="${index}">
@@ -668,7 +682,9 @@ function renderTurn(turn) {
 
 function renderSections(answer, override) {
   if (override) {
-    const displayTip = demoFixedChartType
+    const displayTip = demoStaticChartTypes.length
+      ? "当前固定展示柱状图、饼图和表格，便于同时查看分布和明细。"
+      : demoFixedChartType
       ? "当前仅保留一种数据展示方式，便于快速核对明细。"
       : "可继续切换柱状图、面积图、饼图、雷达图、线图或表格查看不同展示方式。";
     return `
@@ -939,7 +955,7 @@ chatView.addEventListener("click", (event) => {
   const turnElement = event.target.closest("[data-turn-id]");
   const turn = turnElement ? conversationTurns.find((item) => item.id === turnElement.dataset.turnId) : null;
 
-  if (chartButtonElement && turn && !demoFixedChartType) {
+  if (chartButtonElement && turn && !demoFixedChartType && !demoStaticChartTypes.length) {
     const type = chartButtonElement.dataset.chartType;
     const chartCard = chartButtonElement.closest("[data-chart-card]");
     turn.chartType = type;
