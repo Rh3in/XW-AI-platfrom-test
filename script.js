@@ -391,6 +391,8 @@ const defaultAnswers = [
 ];
 
 const answers = Array.isArray(window.aiDemoAnswers) && window.aiDemoAnswers.length ? window.aiDemoAnswers : defaultAnswers;
+const demoFixedChartType = typeof window.aiDemoFixedChartType === "string" ? window.aiDemoFixedChartType : "";
+const demoShowMetricCards = window.aiDemoShowMetricCards !== false;
 
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
@@ -560,7 +562,7 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   }
 
   currentAnswer = answer;
-  const activeChart = override?.chart || answer.defaultChart || "bar";
+  const activeChart = demoFixedChartType || override?.chart || answer.defaultChart || "bar";
   const isFirstTurn = conversationTurns.length === 0;
   conversationTurns.push({
     id: `turn-${turnSeed++}`,
@@ -591,6 +593,28 @@ function renderConversation() {
 
 function renderTurn(turn) {
   const { answer, questionText, override, chartType } = turn;
+  const metricsMarkup = demoShowMetricCards ? renderMetricCards(answer.chartData) : "";
+  const chartMarkup = demoFixedChartType
+    ? `
+        <section class="chart-card chart-card-single" data-chart-card>
+          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
+        </section>
+      `
+    : `
+        <section class="chart-card" data-chart-card>
+          <header class="chart-toolbar">
+            <div class="chart-tabs">
+              ${chartTypes.map((item) => chartButton(item, item.type === chartType)).join("")}
+            </div>
+            <button type="button" class="chart-expand" title="全屏查看" aria-label="全屏查看">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4" />
+              </svg>
+            </button>
+          </header>
+          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
+        </section>
+      `;
 
   return `
     <article class="answer-page" data-turn-id="${turn.id}">
@@ -606,21 +630,9 @@ function renderTurn(turn) {
         </div>
         <div class="answer-divider"></div>
         ${renderSections(answer, override)}
-        ${renderMetricCards(answer.chartData)}
+        ${metricsMarkup}
         <h3>四、${escapeHtml(answer.chartTitle)}</h3>
-        <section class="chart-card" data-chart-card>
-          <header class="chart-toolbar">
-            <div class="chart-tabs">
-              ${chartTypes.map((item) => chartButton(item, item.type === chartType)).join("")}
-            </div>
-            <button type="button" class="chart-expand" title="全屏查看" aria-label="全屏查看">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4" />
-              </svg>
-            </button>
-          </header>
-          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
-        </section>
+        ${chartMarkup}
         <section class="guess-panel" aria-label="猜你想问">
           <header>猜你想问</header>
           <div class="guess-list">
@@ -656,12 +668,15 @@ function renderTurn(turn) {
 
 function renderSections(answer, override) {
   if (override) {
+    const displayTip = demoFixedChartType
+      ? "当前仅保留一种数据展示方式，便于快速核对明细。"
+      : "可继续切换柱状图、面积图、饼图、雷达图、线图或表格查看不同展示方式。";
     return `
       <h3>一、分析结论</h3>
       <p>${escapeHtml(override.body)}</p>
       <h3>二、展示建议</h3>
       <ul>
-        <li>可继续切换柱状图、面积图、饼图、雷达图、线图或表格查看不同展示方式。</li>
+        <li>${escapeHtml(displayTip)}</li>
         <li>若接入真实数据源，可将当前样例字段替换为接口返回的维度和指标。</li>
       </ul>
     `;
@@ -924,7 +939,7 @@ chatView.addEventListener("click", (event) => {
   const turnElement = event.target.closest("[data-turn-id]");
   const turn = turnElement ? conversationTurns.find((item) => item.id === turnElement.dataset.turnId) : null;
 
-  if (chartButtonElement && turn) {
+  if (chartButtonElement && turn && !demoFixedChartType) {
     const type = chartButtonElement.dataset.chartType;
     const chartCard = chartButtonElement.closest("[data-chart-card]");
     turn.chartType = type;
