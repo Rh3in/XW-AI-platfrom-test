@@ -410,6 +410,8 @@ const sendButton = document.querySelector("#sendButton");
 const newChat = document.querySelector("#newChat");
 
 let currentAnswer = null;
+let turnSeed = 1;
+const conversationTurns = [];
 
 function escapeHtml(value) {
   return String(value)
@@ -471,12 +473,33 @@ function renderSearch(query) {
 function renderAnswer(answer, questionText = answer.title, override = null) {
   currentAnswer = answer;
   const activeChart = override?.chart || answer.defaultChart || "bar";
+  conversationTurns.push({
+    id: `turn-${turnSeed++}`,
+    answer,
+    questionText,
+    override,
+    chartType: activeChart,
+  });
+
   main.classList.add("has-answer");
   workspace.classList.add("is-answering");
   searchPanel.hidden = true;
+  renderConversation();
 
-  chatView.innerHTML = `
-    <article class="answer-page">
+  input.value = "";
+  updateSendState();
+  requestAnimationFrame(() => main.scrollTo({ top: main.scrollHeight, behavior: "smooth" }));
+}
+
+function renderConversation() {
+  chatView.innerHTML = conversationTurns.map((turn) => renderTurn(turn)).join("");
+}
+
+function renderTurn(turn) {
+  const { answer, questionText, override, chartType } = turn;
+
+  return `
+    <article class="answer-page" data-turn-id="${turn.id}">
       <div class="query-row">
         <div class="user-query">${escapeHtml(questionText)}</div>
       </div>
@@ -494,7 +517,7 @@ function renderAnswer(answer, questionText = answer.title, override = null) {
         <section class="chart-card" data-chart-card>
           <header class="chart-toolbar">
             <div class="chart-tabs">
-              ${chartTypes.map((item) => chartButton(item, item.type === activeChart)).join("")}
+              ${chartTypes.map((item) => chartButton(item, item.type === chartType)).join("")}
             </div>
             <button type="button" class="chart-expand" title="全屏查看" aria-label="全屏查看">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -502,7 +525,7 @@ function renderAnswer(answer, questionText = answer.title, override = null) {
               </svg>
             </button>
           </header>
-          <div class="chart-body" data-chart-body>${renderChart(activeChart, answer.chartData)}</div>
+          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
         </section>
         <section class="guess-panel" aria-label="猜你想问">
           <header>猜你想问</header>
@@ -535,10 +558,6 @@ function renderAnswer(answer, questionText = answer.title, override = null) {
       </section>
     </article>
   `;
-
-  input.value = "";
-  updateSendState();
-  requestAnimationFrame(() => main.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
 function renderSections(answer, override) {
@@ -777,9 +796,14 @@ function updateSendState() {
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const query = input.value.trim();
+  if (!query) {
+    updateSendState();
+    return;
+  }
+
   const matches = getMatches(query);
-  const answer = matches[0] || answers[0];
-  renderAnswer(answer, query || answer.title);
+  const answer = matches[0] || currentAnswer || answers[0];
+  renderAnswer(answer, query);
 });
 
 input.addEventListener("input", () => {
@@ -803,20 +827,25 @@ searchResults.addEventListener("click", (event) => {
 
 chatView.addEventListener("click", (event) => {
   const chartButtonElement = event.target.closest("[data-chart-type]");
-  if (chartButtonElement && currentAnswer) {
+  const turnElement = event.target.closest("[data-turn-id]");
+  const turn = turnElement ? conversationTurns.find((item) => item.id === turnElement.dataset.turnId) : null;
+
+  if (chartButtonElement && turn) {
     const type = chartButtonElement.dataset.chartType;
     const chartCard = chartButtonElement.closest("[data-chart-card]");
+    turn.chartType = type;
+    currentAnswer = turn.answer;
     chartCard.querySelectorAll(".chart-tab").forEach((button) => {
       button.classList.toggle("active", button === chartButtonElement);
     });
-    chartCard.querySelector("[data-chart-body]").innerHTML = renderChart(type, currentAnswer.chartData);
+    chartCard.querySelector("[data-chart-body]").innerHTML = renderChart(type, turn.answer.chartData);
     return;
   }
 
   const guessButton = event.target.closest("[data-guess-index]");
-  if (guessButton && currentAnswer) {
-    const guess = currentAnswer.guesses[Number(guessButton.dataset.guessIndex)];
-    if (guess) renderAnswer(currentAnswer, guess.label, guess);
+  if (guessButton && turn) {
+    const guess = turn.answer.guesses[Number(guessButton.dataset.guessIndex)];
+    if (guess) renderAnswer(turn.answer, guess.label, guess);
   }
 });
 
@@ -832,10 +861,12 @@ document.querySelectorAll("[data-query]").forEach((item) => {
 newChat.addEventListener("click", () => {
   main.classList.remove("has-answer");
   workspace.classList.remove("is-answering");
+  conversationTurns.length = 0;
   chatView.innerHTML = "";
   input.value = "";
   searchPanel.hidden = true;
   currentAnswer = null;
+  turnSeed = 1;
   updateSendState();
   input.focus();
 });
