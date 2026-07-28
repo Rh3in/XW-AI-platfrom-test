@@ -1555,6 +1555,18 @@ body {
   background: transparent;
 }
 
+.guess-item span {
+  min-width: 0;
+}
+
+.guess-item em {
+  margin-left: 8px;
+  color: #667085;
+  font-size: 12px;
+  font-style: normal;
+  white-space: nowrap;
+}
+
 .guess-item:hover {
   background: #f5f8fc;
 }

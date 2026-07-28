@@ -433,7 +433,28 @@ const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((it
 }));
 let userHistory = loadUserHistory();
 
-function getStaticChartTypes(answer) {
+function normalizeStaticChartType(type) {
+  if (type === "bar" || type === "pie" || type === "table") return type;
+  if (type === "radar") return "pie";
+  if (type === "line" || type === "area") return "bar";
+  return type ? "bar" : "";
+}
+
+function chartKindLabel(type) {
+  return {
+    bar: "柱状",
+    pie: "饼图",
+    table: "表格",
+  }[normalizeStaticChartType(type)] || "图表";
+}
+
+function getStaticChartTypes(answer, override = null) {
+  if (override) {
+    const overrideCharts = Array.isArray(override.displayCharts) ? override.displayCharts : [override.chart];
+    const normalizedCharts = overrideCharts.map((type) => normalizeStaticChartType(type)).filter(Boolean);
+    if (normalizedCharts.length) return normalizedCharts;
+  }
+
   if (Array.isArray(answer?.displayCharts) && answer.displayCharts.length) {
     return answer.displayCharts.filter(Boolean);
   }
@@ -579,7 +600,7 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   }
 
   currentAnswer = answer;
-  const activeChart = getStaticChartTypes(answer)[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
+  const activeChart = getStaticChartTypes(answer, override)[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
   const isFirstTurn = conversationTurns.length === 0;
   conversationTurns.push({
     id: `turn-${turnSeed++}`,
@@ -610,7 +631,7 @@ function renderConversation() {
 
 function renderTurn(turn) {
   const { answer, questionText, override, chartType } = turn;
-  const staticChartTypes = getStaticChartTypes(answer);
+  const staticChartTypes = getStaticChartTypes(answer, override);
   const metricsMarkup = demoShowMetricCards ? renderMetricCards(answer.chartData) : "";
   const sectionCount = override ? 2 : Array.isArray(answer.sections) ? answer.sections.length : 0;
   const chartHeading = `${sectionNumber(sectionCount + 1)}、${escapeHtml(answer.chartTitle)}`;
@@ -672,7 +693,8 @@ function renderTurn(turn) {
           <div class="guess-list">
             ${answer.guesses.map((item, index) => `
               <button type="button" class="guess-item" data-guess-index="${index}">
-                ${escapeHtml(item.label)}
+                <span>${escapeHtml(item.label)}</span>
+                <em>${escapeHtml(chartKindLabel(item.chart))}</em>
               </button>
             `).join("")}
           </div>
@@ -689,7 +711,7 @@ function renderTurn(turn) {
 
 function renderSections(answer, override) {
   if (override) {
-    const staticChartTypes = getStaticChartTypes(answer);
+    const staticChartTypes = getStaticChartTypes(answer, override);
     const displayTip = staticChartTypes.length
       ? "当前根据问题类型固定使用一种数据展示方式，便于快速查看重点。"
       : demoFixedChartType
@@ -963,7 +985,7 @@ chatView.addEventListener("click", (event) => {
   const turnElement = event.target.closest("[data-turn-id]");
   const turn = turnElement ? conversationTurns.find((item) => item.id === turnElement.dataset.turnId) : null;
 
-  if (chartButtonElement && turn && !demoFixedChartType && !getStaticChartTypes(turn.answer).length) {
+  if (chartButtonElement && turn && !demoFixedChartType && !getStaticChartTypes(turn.answer, turn.override).length) {
     const type = chartButtonElement.dataset.chartType;
     const chartCard = chartButtonElement.closest("[data-chart-card]");
     turn.chartType = type;
