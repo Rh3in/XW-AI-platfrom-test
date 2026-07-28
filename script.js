@@ -400,6 +400,11 @@ const demoQuestionTitle = typeof window.aiDemoQuestionTitle === "string" && wind
 const demoStaticGuessCharts = window.aiDemoStaticGuessCharts === true;
 const demoAnswerMetaPlacement = window.aiDemoAnswerMetaPlacement === "bottom" ? "bottom" : "top";
 const demoCompactActions = window.aiDemoCompactActions === true;
+const demoThinkingEnabled = window.aiDemoThinkingEnabled === true;
+const configuredThinkingMinMs = Number(window.aiDemoThinkingMinMs);
+const configuredThinkingMaxMs = Number(window.aiDemoThinkingMaxMs);
+const thinkingMinMs = Math.min(15000, Math.max(5000, Number.isFinite(configuredThinkingMinMs) ? configuredThinkingMinMs : 5000));
+const thinkingMaxMs = Math.min(15000, Math.max(thinkingMinMs, Number.isFinite(configuredThinkingMaxMs) ? configuredThinkingMaxMs : 15000));
 
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
@@ -423,8 +428,10 @@ const newChat = document.querySelector("#newChat");
 
 let currentAnswer = null;
 let turnSeed = 1;
+let thinkingSeed = 1;
 let selectedHistoryId = "";
 const conversationTurns = [];
+const thinkingTimers = new Map();
 const historyStorageKey = window.aiDemoStorageKey || "aiDataConversationHistory";
 const historyLimit = 20;
 const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((item, index) => ({
@@ -588,8 +595,22 @@ function renderSearch(query) {
     .join("");
 }
 
+function getThinkingDelay() {
+  return Math.round(thinkingMinMs + Math.random() * (thinkingMaxMs - thinkingMinMs));
+}
+
+function clearPendingThinking() {
+  thinkingTimers.forEach((timer) => clearTimeout(timer));
+  thinkingTimers.clear();
+}
+
+function scrollConversationToBottom() {
+  requestAnimationFrame(() => main.scrollTo({ top: main.scrollHeight, behavior: "smooth" }));
+}
+
 function renderAnswer(answer, questionText = answer.title, override = null, options = {}) {
   if (options.replaceConversation) {
+    clearPendingThinking();
     conversationTurns.length = 0;
     turnSeed = 1;
   }
@@ -617,11 +638,91 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
 
   input.value = "";
   updateSendState();
-  requestAnimationFrame(() => main.scrollTo({ top: main.scrollHeight, behavior: "smooth" }));
+  scrollConversationToBottom();
+}
+
+function renderAnswerWithThinking(answer, questionText = answer.title, override = null, options = {}) {
+  if (!demoThinkingEnabled) {
+    renderAnswer(answer, questionText, override, options);
+    return;
+  }
+
+  if (options.replaceConversation) {
+    clearPendingThinking();
+    conversationTurns.length = 0;
+    turnSeed = 1;
+  }
+
+  currentAnswer = answer;
+  const isFirstTurn = conversationTurns.length === 0;
+  const thinkingId = `thinking-${thinkingSeed++}`;
+  conversationTurns.push({
+    id: thinkingId,
+    type: "thinking",
+    answer,
+    questionText,
+    override,
+  });
+
+  main.classList.add("has-answer");
+  workspace.classList.add("is-answering");
+  searchPanel.hidden = true;
+  if (options.addToHistory !== false && isFirstTurn) addHistoryRecord(questionText, answer);
+  if (options.selectedHistoryId !== undefined) {
+    selectedHistoryId = options.selectedHistoryId;
+    renderHistoryList();
+  }
+  renderConversation();
+
+  input.value = "";
+  updateSendState();
+  scrollConversationToBottom();
+
+  const timer = setTimeout(() => {
+    thinkingTimers.delete(thinkingId);
+    const index = conversationTurns.findIndex((item) => item.id === thinkingId);
+    if (index < 0) return;
+    const activeChart = getStaticChartTypes(answer, override)[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
+    conversationTurns[index] = {
+      id: `turn-${turnSeed++}`,
+      answer,
+      questionText,
+      override,
+      chartType: activeChart,
+    };
+    currentAnswer = answer;
+    renderConversation();
+    scrollConversationToBottom();
+  }, getThinkingDelay());
+
+  thinkingTimers.set(thinkingId, timer);
 }
 
 function renderConversation() {
-  chatView.innerHTML = conversationTurns.map((turn) => renderTurn(turn)).join("");
+  chatView.innerHTML = conversationTurns.map((turn) => (turn.type === "thinking" ? renderThinkingTurn(turn) : renderTurn(turn))).join("");
+}
+
+function renderThinkingTurn(turn) {
+  return `
+    <article class="answer-page thinking-page" data-turn-id="${turn.id}">
+      <div class="query-row">
+        <div class="user-query">${escapeHtml(turn.questionText)}</div>
+      </div>
+      <section class="thinking-card" aria-live="polite">
+        <div class="thinking-title">
+          <span>正在思考</span>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <ol>
+          <li>识别问题意图，匹配相关业务数据主题。</li>
+          <li>整理指标、维度和适合的展示方式。</li>
+          <li>组织回答结构，准备生成分析结果。</li>
+        </ol>
+      </section>
+    </article>
+  `;
 }
 
 function renderTurn(turn) {
@@ -998,7 +1099,7 @@ form.addEventListener("submit", (event) => {
 
   const matches = getMatches(query);
   const answer = matches[0] || currentAnswer || answers[0];
-  renderAnswer(answer, query);
+  renderAnswerWithThinking(answer, query);
 });
 
 input.addEventListener("input", () => {
@@ -1017,7 +1118,7 @@ searchResults.addEventListener("click", (event) => {
   const button = event.target.closest("[data-answer-id]");
   if (!button) return;
   const answer = answers.find((item) => item.id === button.dataset.answerId);
-  if (answer) renderAnswer(answer, answer.title);
+  if (answer) renderAnswerWithThinking(answer, answer.title);
 });
 
 chatView.addEventListener("click", (event) => {
@@ -1040,7 +1141,7 @@ chatView.addEventListener("click", (event) => {
   const guessButton = event.target.closest("[data-guess-index]");
   if (guessButton && turn) {
     const guess = turn.answer.guesses[Number(guessButton.dataset.guessIndex)];
-    if (guess) renderAnswer(turn.answer, guess.label, guess);
+    if (guess) renderAnswerWithThinking(turn.answer, guess.label, guess);
   }
 });
 
@@ -1059,6 +1160,7 @@ historyList.addEventListener("click", (event) => {
 });
 
 newChat.addEventListener("click", () => {
+  clearPendingThinking();
   main.classList.remove("has-answer");
   workspace.classList.remove("is-answering");
   conversationTurns.length = 0;
