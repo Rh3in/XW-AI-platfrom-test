@@ -440,14 +440,6 @@ function normalizeStaticChartType(type) {
   return type ? "bar" : "";
 }
 
-function chartKindLabel(type) {
-  return {
-    bar: "柱状",
-    pie: "饼图",
-    table: "表格",
-  }[normalizeStaticChartType(type)] || "图表";
-}
-
 function getStaticChartTypes(answer, override = null) {
   if (override) {
     const overrideCharts = Array.isArray(override.displayCharts) ? override.displayCharts : [override.chart];
@@ -694,7 +686,6 @@ function renderTurn(turn) {
             ${answer.guesses.map((item, index) => `
               <button type="button" class="guess-item" data-guess-index="${index}">
                 <span>${escapeHtml(item.label)}</span>
-                <em>${escapeHtml(chartKindLabel(item.chart))}</em>
               </button>
             `).join("")}
           </div>
