@@ -403,8 +403,8 @@ const demoCompactActions = window.aiDemoCompactActions === true;
 const demoThinkingEnabled = window.aiDemoThinkingEnabled === true;
 const configuredThinkingMinMs = Number(window.aiDemoThinkingMinMs);
 const configuredThinkingMaxMs = Number(window.aiDemoThinkingMaxMs);
-const thinkingMinMs = Math.min(15000, Math.max(5000, Number.isFinite(configuredThinkingMinMs) ? configuredThinkingMinMs : 5000));
-const thinkingMaxMs = Math.min(15000, Math.max(thinkingMinMs, Number.isFinite(configuredThinkingMaxMs) ? configuredThinkingMaxMs : 15000));
+const thinkingMinMs = Math.max(0, Number.isFinite(configuredThinkingMinMs) ? configuredThinkingMinMs : 3000);
+const thinkingMaxMs = Math.max(thinkingMinMs, Number.isFinite(configuredThinkingMaxMs) ? configuredThinkingMaxMs : 6000);
 
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
