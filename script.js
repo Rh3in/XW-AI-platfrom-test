@@ -433,6 +433,14 @@ const builtInHistory = [...historyList.querySelectorAll("[data-query]")].map((it
 }));
 let userHistory = loadUserHistory();
 
+function getStaticChartTypes(answer) {
+  if (Array.isArray(answer?.displayCharts) && answer.displayCharts.length) {
+    return answer.displayCharts.filter(Boolean);
+  }
+
+  return demoStaticChartTypes;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -566,7 +574,7 @@ function renderAnswer(answer, questionText = answer.title, override = null, opti
   }
 
   currentAnswer = answer;
-  const activeChart = demoStaticChartTypes[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
+  const activeChart = getStaticChartTypes(answer)[0] || demoFixedChartType || override?.chart || answer.defaultChart || "bar";
   const isFirstTurn = conversationTurns.length === 0;
   conversationTurns.push({
     id: `turn-${turnSeed++}`,
@@ -597,11 +605,12 @@ function renderConversation() {
 
 function renderTurn(turn) {
   const { answer, questionText, override, chartType } = turn;
+  const staticChartTypes = getStaticChartTypes(answer);
   const metricsMarkup = demoShowMetricCards ? renderMetricCards(answer.chartData) : "";
-  const chartMarkup = demoStaticChartTypes.length
+  const chartMarkup = staticChartTypes.length
     ? `
         <section class="chart-card chart-card-static" data-chart-card>
-          ${demoStaticChartTypes.map((type) => `
+          ${staticChartTypes.map((type) => `
             <div class="static-chart-block static-chart-${escapeHtml(type)}">
               <div class="chart-body" data-chart-body>${renderChart(type, answer.chartData)}</div>
             </div>
@@ -682,8 +691,9 @@ function renderTurn(turn) {
 
 function renderSections(answer, override) {
   if (override) {
-    const displayTip = demoStaticChartTypes.length
-      ? "当前固定展示柱状图、饼图和表格，便于同时查看分布和明细。"
+    const staticChartTypes = getStaticChartTypes(answer);
+    const displayTip = staticChartTypes.length
+      ? "当前根据问题类型固定使用一种数据展示方式，便于快速查看重点。"
       : demoFixedChartType
       ? "当前仅保留一种数据展示方式，便于快速核对明细。"
       : "可继续切换柱状图、面积图、饼图、雷达图、线图或表格查看不同展示方式。";
@@ -955,7 +965,7 @@ chatView.addEventListener("click", (event) => {
   const turnElement = event.target.closest("[data-turn-id]");
   const turn = turnElement ? conversationTurns.find((item) => item.id === turnElement.dataset.turnId) : null;
 
-  if (chartButtonElement && turn && !demoFixedChartType && !demoStaticChartTypes.length) {
+  if (chartButtonElement && turn && !demoFixedChartType && !getStaticChartTypes(turn.answer).length) {
     const type = chartButtonElement.dataset.chartType;
     const chartCard = chartButtonElement.closest("[data-chart-card]");
     turn.chartType = type;

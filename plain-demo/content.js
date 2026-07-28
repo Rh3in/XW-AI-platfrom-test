@@ -8,6 +8,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-27 09:20",
     chartTitle: "本月关键经营指标",
     defaultChart: "bar",
+    displayCharts: ["bar"],
     chartData: [
       { label: "收入达成", value: 86, group: "达成率" },
       { label: "毛利率", value: 42, group: "利润" },
@@ -45,6 +46,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-26 16:10",
     chartTitle: "应收账龄分布",
     defaultChart: "pie",
+    displayCharts: ["pie"],
     chartData: [
       { label: "30天内", value: 46, group: "正常" },
       { label: "31-60天", value: 24, group: "关注" },
@@ -80,6 +82,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-25 13:45",
     chartTitle: "供应商准时交付率",
     defaultChart: "line",
+    displayCharts: ["bar"],
     chartData: [
       { label: "1月", value: 91, group: "OTD" },
       { label: "2月", value: 88, group: "OTD" },
@@ -118,6 +121,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-24 11:05",
     chartTitle: "关键工序良率",
     defaultChart: "radar",
+    displayCharts: ["table"],
     chartData: [
       { label: "来料检验", value: 94, group: "工序" },
       { label: "装配", value: 87, group: "工序" },
@@ -155,6 +159,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-23 10:35",
     chartTitle: "重点品类库存周转天数",
     defaultChart: "bar",
+    displayCharts: ["bar"],
     chartData: [
       { label: "核心料", value: 38, group: "物料" },
       { label: "结构件", value: 56, group: "物料" },
@@ -192,6 +197,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-22 15:30",
     chartTitle: "合同里程碑完成率",
     defaultChart: "area",
+    displayCharts: ["table"],
     chartData: [
       { label: "启动", value: 96, group: "里程碑" },
       { label: "方案", value: 88, group: "里程碑" },
@@ -229,6 +235,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-21 18:20",
     chartTitle: "工单处理效率",
     defaultChart: "line",
+    displayCharts: ["bar"],
     chartData: [
       { label: "周一", value: 82, group: "效率" },
       { label: "周二", value: 85, group: "效率" },
@@ -267,6 +274,7 @@ window.aiDemoAnswers = [
     createdAt: "2026-07-20 17:00",
     chartTitle: "部门人效指数",
     defaultChart: "radar",
+    displayCharts: ["pie"],
     chartData: [
       { label: "销售", value: 78, group: "部门" },
       { label: "交付", value: 72, group: "部门" },
