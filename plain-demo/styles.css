@@ -1559,6 +1559,46 @@ body {
   background: #f5f8fc;
 }
 
+.answer-record {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 12px;
+  padding-top: 8px;
+  color: #667085;
+  font-size: 12px;
+}
+
+.answer-record strong {
+  color: #344054;
+  font-weight: 500;
+}
+
+.response-actions-compact {
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.response-actions-compact .response-action {
+  width: 28px;
+  min-height: 28px;
+  padding: 0;
+  color: #5d6b82;
+  border: 0;
+  background: transparent;
+  border-radius: 4px;
+}
+
+.response-actions-compact .response-action:hover {
+  color: var(--theme);
+  background: #edf4ff;
+}
+
+.response-actions-compact .response-action svg {
+  width: 18px;
+  height: 18px;
+}
+
 @media (max-width: 900px) {
   .static-chart-pie .pie-chart {
     grid-template-columns: 1fr;

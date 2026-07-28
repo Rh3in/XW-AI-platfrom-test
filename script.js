@@ -397,6 +397,9 @@ const demoShowMetricCards = window.aiDemoShowMetricCards !== false;
 const demoQuestionTitle = typeof window.aiDemoQuestionTitle === "string" && window.aiDemoQuestionTitle.trim()
   ? window.aiDemoQuestionTitle.trim()
   : "猜你想问";
+const demoStaticGuessCharts = window.aiDemoStaticGuessCharts === true;
+const demoAnswerMetaPlacement = window.aiDemoAnswerMetaPlacement === "bottom" ? "bottom" : "top";
+const demoCompactActions = window.aiDemoCompactActions === true;
 
 const chartTypes = [
   { type: "line", label: "线图", icon: "M4 17l5-6 4 3 7-9" },
@@ -441,7 +444,7 @@ function normalizeStaticChartType(type) {
 }
 
 function getStaticChartTypes(answer, override = null) {
-  if (override) {
+  if (demoStaticGuessCharts && override) {
     const overrideCharts = Array.isArray(override.displayCharts) ? override.displayCharts : [override.chart];
     const normalizedCharts = overrideCharts.map((type) => normalizeStaticChartType(type)).filter(Boolean);
     if (normalizedCharts.length) return normalizedCharts;
@@ -627,6 +630,8 @@ function renderTurn(turn) {
   const metricsMarkup = demoShowMetricCards ? renderMetricCards(answer.chartData) : "";
   const sectionCount = override ? 2 : Array.isArray(answer.sections) ? answer.sections.length : 0;
   const chartHeading = `${sectionNumber(sectionCount + 1)}、${escapeHtml(answer.chartTitle)}`;
+  const topMetaMarkup = demoAnswerMetaPlacement === "top" ? renderAnswerMeta(answer) : "";
+  const bottomMetaMarkup = demoAnswerMetaPlacement === "bottom" ? renderAnswerRecord(answer) : "";
   const chartMarkup = staticChartTypes.length
     ? `
         <section class="chart-card chart-card-static" data-chart-card>
@@ -666,16 +671,13 @@ function renderTurn(turn) {
       </div>
       <section class="answer-content">
         <h2>${escapeHtml(override?.title || answer.title)}</h2>
-        <div class="meta-row">
-          <span>数据来源：${escapeHtml(answer.source)}</span>
-          <span>创建人：<strong>${escapeHtml(answer.creator)}</strong></span>
-          <span>创建时间：${escapeHtml(answer.createdAt)}</span>
-        </div>
+        ${topMetaMarkup}
         <div class="answer-divider"></div>
         ${renderSections(answer, override)}
         ${metricsMarkup}
         <h3>${chartHeading}</h3>
         ${chartMarkup}
+        ${bottomMetaMarkup}
         <section class="guess-panel" aria-label="${escapeHtml(demoQuestionTitle)}">
           <header>${escapeHtml(demoQuestionTitle)}</header>
           <div class="guess-list">
@@ -686,26 +688,30 @@ function renderTurn(turn) {
             `).join("")}
           </div>
         </section>
-        <div class="response-actions" aria-label="回答操作">
-          ${actionIcon("M5 11v4h3l5 4V7l-5 4H5ZM17 9a4 4 0 0 1 0 6")}
-          ${actionIcon("M8 8V5.5A1.5 1.5 0 0 1 9.5 4h8A1.5 1.5 0 0 1 19 5.5v8A1.5 1.5 0 0 1 17.5 15H15M5 9h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 13 20H5.5A1.5 1.5 0 0 1 4 18.5v-8A1.5 1.5 0 0 1 5.5 9Z")}
-          ${actionIcon("M12 4v12M7 11l5 5 5-5M5 20h14")}
-          ${actionIcon("M4 10a7 7 0 0 1 11.7-4.8L18 7.5M20 14a7 7 0 0 1-11.7 4.8L6 16.5")}
-          ${actionIcon("M7 12 4 15l3 3M4 15h10a5 5 0 0 0 0-10h-1")}
-          <span class="action-separator"></span>
-          ${actionIcon("M7 11v10H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2Zm0 0 4-8h1.5A2.5 2.5 0 0 1 15 5.5V9h3.4a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.2 20H7")}
-          ${actionIcon("M17 13V3h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2Zm0 0-4 8h-1.5A2.5 2.5 0 0 1 9 18.5V15H5.6a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.8 4H17")}
-          <button type="button" class="share-timed">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="8" cy="8" r="3" />
-              <circle cx="16" cy="16" r="3" />
-              <path d="M10.4 10.3 13.6 13.7M14.2 8.4 10 14" />
-            </svg>
-            定时分享
-          </button>
-        </div>
+        ${renderResponseActions()}
       </section>
     </article>
+  `;
+}
+
+function renderAnswerMeta(answer) {
+  return `
+    <div class="meta-row">
+      <span>数据来源：${escapeHtml(answer.source)}</span>
+      <span>创建人：<strong>${escapeHtml(answer.creator)}</strong></span>
+      <span>创建时间：${escapeHtml(answer.createdAt)}</span>
+    </div>
+  `;
+}
+
+function renderAnswerRecord(answer) {
+  return `
+    <div class="answer-record" aria-label="记录信息">
+      <strong>记录信息</strong>
+      <span>来源：${escapeHtml(answer.source)}</span>
+      <span>分析人：${escapeHtml(answer.creator)}</span>
+      <span>时间：${escapeHtml(answer.createdAt)}</span>
+    </div>
   `;
 }
 
@@ -763,9 +769,43 @@ function chartButton(item, active) {
   `;
 }
 
-function actionIcon(path) {
+function renderResponseActions() {
+  if (demoCompactActions) {
+    return `
+      <div class="response-actions response-actions-compact" aria-label="回答操作">
+        ${actionIcon("M8 8V5.5A1.5 1.5 0 0 1 9.5 4h8A1.5 1.5 0 0 1 19 5.5v8A1.5 1.5 0 0 1 17.5 15H15M5.5 9h8A1.5 1.5 0 0 1 15 10.5v8A1.5 1.5 0 0 1 13.5 20h-8A1.5 1.5 0 0 1 4 18.5v-8A1.5 1.5 0 0 1 5.5 9Z", "复制")}
+        ${actionIcon("M12 4v10M8 10l4 4 4-4M5 19h14", "下载")}
+        ${actionIcon("M20 7v5h-5M4 17v-5h5M18 12a6 6 0 0 0-10.4-4M6 12a6 6 0 0 0 10.4 4", "刷新")}
+      </div>
+    `;
+  }
+
   return `
-    <button type="button" class="response-action">
+    <div class="response-actions" aria-label="回答操作">
+      ${actionIcon("M5 11v4h3l5 4V7l-5 4H5ZM17 9a4 4 0 0 1 0 6")}
+      ${actionIcon("M8 8V5.5A1.5 1.5 0 0 1 9.5 4h8A1.5 1.5 0 0 1 19 5.5v8A1.5 1.5 0 0 1 17.5 15H15M5 9h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 13 20H5.5A1.5 1.5 0 0 1 4 18.5v-8A1.5 1.5 0 0 1 5.5 9Z")}
+      ${actionIcon("M12 4v12M7 11l5 5 5-5M5 20h14")}
+      ${actionIcon("M4 10a7 7 0 0 1 11.7-4.8L18 7.5M20 14a7 7 0 0 1-11.7 4.8L6 16.5")}
+      ${actionIcon("M7 12 4 15l3 3M4 15h10a5 5 0 0 0 0-10h-1")}
+      <span class="action-separator"></span>
+      ${actionIcon("M7 11v10H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2Zm0 0 4-8h1.5A2.5 2.5 0 0 1 15 5.5V9h3.4a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.2 20H7")}
+      ${actionIcon("M17 13V3h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2Zm0 0-4 8h-1.5A2.5 2.5 0 0 1 9 18.5V15H5.6a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.8 4H17")}
+      <button type="button" class="share-timed">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="8" cy="8" r="3" />
+          <circle cx="16" cy="16" r="3" />
+          <path d="M10.4 10.3 13.6 13.7M14.2 8.4 10 14" />
+        </svg>
+        定时分享
+      </button>
+    </div>
+  `;
+}
+
+function actionIcon(path, label = "") {
+  const labelAttrs = label ? ` title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"` : "";
+  return `
+    <button type="button" class="response-action"${labelAttrs}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="${path}" /></svg>
     </button>
   `;
