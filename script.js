@@ -738,7 +738,7 @@ function renderTurn(turn) {
         <section class="chart-card chart-card-static" data-chart-card>
           ${staticChartTypes.map((type) => `
             <div class="static-chart-block static-chart-${escapeHtml(type)}">
-              <div class="chart-body" data-chart-body>${renderChart(type, answer.chartData)}</div>
+              <div class="chart-body" data-chart-body>${renderChart(type, answer.chartData, answer)}</div>
             </div>
           `).join("")}
         </section>
@@ -746,7 +746,7 @@ function renderTurn(turn) {
     : demoFixedChartType
     ? `
         <section class="chart-card chart-card-single" data-chart-card>
-          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
+          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData, answer)}</div>
         </section>
       `
     : `
@@ -761,7 +761,7 @@ function renderTurn(turn) {
               </svg>
             </button>
           </header>
-          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData)}</div>
+          <div class="chart-body" data-chart-body>${renderChart(chartType, answer.chartData, answer)}</div>
         </section>
       `;
 
@@ -912,12 +912,12 @@ function actionIcon(path, label = "") {
   `;
 }
 
-function renderChart(type, data) {
+function renderChart(type, data, answer = null) {
   if (type === "area") return renderAreaChart(data);
   if (type === "pie") return renderPieChart(data);
   if (type === "radar") return renderRadarChart(data);
   if (type === "line") return renderLineChart(data);
-  if (type === "table") return renderTable(data);
+  if (type === "table") return renderTable(data, answer);
   return renderBarChart(data);
 }
 
@@ -1057,7 +1057,29 @@ function renderRadarChart(data) {
   `;
 }
 
-function renderTable(data) {
+function renderTable(data, answer = null) {
+  const hasCustomTable = Array.isArray(answer?.tableHeaders) && data.every((item) => Array.isArray(item.columns));
+  if (hasCustomTable) {
+    return `
+      <div class="data-table">
+        <table>
+          <thead>
+            <tr>
+              ${answer.tableHeaders.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map((item) => `
+              <tr>
+                ${item.columns.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   return `
     <div class="data-table">
       <table>
@@ -1134,7 +1156,7 @@ chatView.addEventListener("click", (event) => {
     chartCard.querySelectorAll(".chart-tab").forEach((button) => {
       button.classList.toggle("active", button === chartButtonElement);
     });
-    chartCard.querySelector("[data-chart-body]").innerHTML = renderChart(type, turn.answer.chartData);
+    chartCard.querySelector("[data-chart-body]").innerHTML = renderChart(type, turn.answer.chartData, turn.answer);
     return;
   }
 

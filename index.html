@@ -109,37 +109,37 @@
             <a href="#">更多<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg></a>
           </header>
           <div class="history-list" id="historyList">
-            <a href="#" class="history-item" data-query="下一年技术部门编制缺口预测">
+            <a href="#" class="history-item" data-query="帮我统计一下年龄小于30岁的人员职业情况，用柱状图展示" data-history-answer-id="under-30-occupation">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              下一年技术部门编制缺口
+              年龄小于30岁人员职业
             </a>
-            <a href="#" class="history-item" data-query="2024财务收入报表统计">
+            <a href="#" class="history-item" data-query="统计企业所有制情况，柱状图展示" data-history-answer-id="ownership-distribution">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              2024财务收入报表统计
+              企业所有制分布统计
             </a>
-            <a href="#" class="history-item" data-query="销售目标完成率预测">
+            <a href="#" class="history-item" data-query="股东人数超过4人的企业有哪些" data-history-answer-id="shareholders-over-four">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              销售目标完成率预测
+              股东人数超过4人的企业
             </a>
-            <a href="#" class="history-item" data-query="客户流失风险分层">
+            <a href="#" class="history-item" data-query="按行政区统计企业数量" data-history-answer-id="district-enterprise-count">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              客户流失风险分层
+              各区企业数量统计
             </a>
-            <a href="#" class="history-item" data-query="库存周转与缺货预警">
+            <a href="#" class="history-item" data-query="统计近一年新注册企业趋势" data-history-answer-id="new-registration-trend">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              库存周转与缺货预警
+              近一年新注册企业趋势
             </a>
-            <a href="#" class="history-item" data-query="营销漏斗转化分析">
+            <a href="#" class="history-item" data-query="注册资本区间分布统计" data-history-answer-id="capital-range-distribution">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              营销漏斗转化分析
+              注册资本区间分布
             </a>
-            <a href="#" class="history-item" data-query="客服工单SLA趋势">
+            <a href="#" class="history-item" data-query="同一法人名下多企业情况" data-history-answer-id="legal-person-multi-company">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              客服工单SLA趋势
+              同一法人多企业排查
             </a>
-            <a href="#" class="history-item" data-query="预算成本偏差分析">
+            <a href="#" class="history-item" data-query="人员规模小于10人的企业行业分布" data-history-answer-id="small-staff-industry">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1.8" /><path d="M7 15l3.2-3.1 2.4 2 4.3-5M4 20h16" /></svg>
-              预算成本偏差分析
+              小规模企业行业分布
             </a>
           </div>
         </section>
@@ -212,10 +212,239 @@
     </div>
 
     <script>
+      window.aiDemoAnswers = [
+        {
+          id: "under-30-occupation",
+          title: "年龄小于30岁人员职业分布统计",
+          keywords: ["年龄", "小于30", "30岁", "人员", "职业", "柱状图", "统计"],
+          source: "人员档案与企业登记数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:18",
+          chartTitle: "年龄小于30岁人员职业分布统计",
+          defaultChart: "bar",
+          tableHeaders: ["序号", "职业", "人员数量（人）"],
+          chartData: [
+            { label: "程序员", value: 1, group: "技术类", columns: ["1", "程序员", "1"] },
+            { label: "金融分析师", value: 1, group: "金融类", columns: ["2", "金融分析师", "1"] },
+            { label: "设计师", value: 1, group: "创意类", columns: ["3", "设计师", "1"] },
+            { label: "摄影师", value: 1, group: "创意类", columns: ["4", "摄影师", "1"] },
+            { label: "会计", value: 1, group: "财务类", columns: ["5", "会计", "1"] },
+            { label: "产品经理", value: 1, group: "产品类", columns: ["6", "产品经理", "1"] },
+            { label: "空姐", value: 1, group: "服务类", columns: ["7", "空姐", "1"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按年龄小于30岁筛选人员档案，并按职业字段进行分组统计。当前结果仅展示符合条件人员的职业分布情况。" },
+            { heading: "二、统计结果", body: "本次查询共命中7条人员记录，各职业当前均为1人，说明样本分布较分散，暂未出现明显集中职业。" },
+            { heading: "三、解读建议", body: "如果需要进一步分析年轻人员结构，可以继续按企业、部门、学历、入职时间或所在区域拆分，判断人员来源和岗位集中度。" },
+          ],
+          guesses: [
+            { label: "列出年龄小于30岁的人员明细", body: "可输出姓名、年龄、职业、所属企业、所在区域和登记时间字段，用于核对明细记录是否完整。", chart: "table" },
+            { label: "按企业统计小于30岁人员数量", body: "建议按企业名称聚合，查看年轻人员是否集中在少数企业，并识别人员结构偏年轻的机构。", chart: "bar" },
+            { label: "生成职业占比饼图", body: "当前各职业人数相同，占比接近均匀；若后续样本增加，可用饼图判断职业类别是否集中。", chart: "pie" },
+          ],
+        },
+        {
+          id: "ownership-distribution",
+          title: "企业所有制分布统计",
+          keywords: ["企业", "所有制", "国企", "民营", "外企", "柱状图", "统计"],
+          source: "工商登记基础库",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:22",
+          chartTitle: "企业所有制分布统计",
+          defaultChart: "bar",
+          tableHeaders: ["序号", "企业所有制", "企业数量（家）"],
+          chartData: [
+            { label: "国企", value: 4, group: "所有制", columns: ["1", "国企", "4"] },
+            { label: "民营", value: 3, group: "所有制", columns: ["2", "民营", "3"] },
+            { label: "外企", value: 1, group: "所有制", columns: ["3", "外企", "1"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按企业登记信息中的所有制类型进行分组统计，当前仅统计样例库内可识别所有制的企业记录。" },
+            { heading: "二、统计结果", body: "本次共查询到3类企业所有制分布数据，其中国企4家、民营3家、外企1家。" },
+            { heading: "三、数据解读", body: "从分布看，国企数量最多，民营企业次之，外企数量较少。该结构说明当前样例库以国企和民营企业为主。" },
+          ],
+          guesses: [
+            { label: "按行业拆分所有制分布", body: "可将所有制与行业字段交叉统计，判断某类行业是否主要由国企、民营或外企构成。", chart: "table" },
+            { label: "生成所有制占比饼图", body: "国企占比约50%，民营约37.5%，外企约12.5%，适合用饼图快速查看结构。", chart: "pie" },
+            { label: "列出外企明细", body: "可输出外企名称、注册日期、注册资本、法人姓名和注册地址，便于后续核对。", chart: "table" },
+          ],
+        },
+        {
+          id: "shareholders-over-four",
+          title: "股东人数超过4人的企业清单",
+          keywords: ["股东", "股东人数", "超过4人", "企业", "明细", "清单", "表格"],
+          source: "企业股权登记数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:27",
+          chartTitle: "股东人数超过4人的企业明细",
+          defaultChart: "table",
+          tableHeaders: ["序号", "机构名称", "注册或登记日期", "股东数", "注册资本金额（元）", "法人姓名"],
+          chartData: [
+            { label: "广州市创蔚服装有限公司", value: 6, group: "大型企业", columns: ["1", "广州市创蔚服装有限公司", "2026-05-18", "6", "15,000,000.00", "孙婉婷"] },
+            { label: "广州佛镁特家居有限公司", value: 5, group: "小微企业", columns: ["2", "广州佛镁特家居有限公司", "2018-02-18", "5", "1,500,000.00", "王建国"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已筛选股东人数超过4人的企业，并展示机构名称、登记日期、股东数、注册资本和法人姓名等关键字段。" },
+            { heading: "二、查询结果", body: "当前共命中2家企业，分别为广州市创蔚服装有限公司和广州佛镁特家居有限公司，股东数分别为6人和5人。" },
+            { heading: "三、数据解读", body: "两家企业均位于广州，注册资本差异较大，建议结合行业、注册地址、股权变更记录进一步判断企业规模和经营稳定性。" },
+          ],
+          guesses: [
+            { label: "按股东人数排序展示", body: "可按股东数降序展示企业清单，优先查看股东人数最多的企业及其注册资本情况。", chart: "bar" },
+            { label: "补充股东姓名明细", body: "可继续展开每家企业的股东姓名、持股比例、认缴金额和出资时间，形成股权穿透明细。", chart: "table" },
+            { label: "筛选注册资本大于100万", body: "在当前结果中，两家企业注册资本均大于100万元，可继续叠加行业或区域条件做精确筛选。", chart: "table" },
+          ],
+        },
+        {
+          id: "district-enterprise-count",
+          title: "各区企业数量统计",
+          keywords: ["行政区", "区域", "企业数量", "各区", "柱状图", "分布"],
+          source: "企业登记地址数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:31",
+          chartTitle: "各区企业数量统计",
+          defaultChart: "bar",
+          tableHeaders: ["序号", "行政区", "企业数量（家）"],
+          chartData: [
+            { label: "天河区", value: 9, group: "中心城区", columns: ["1", "天河区", "9"] },
+            { label: "海珠区", value: 6, group: "中心城区", columns: ["2", "海珠区", "6"] },
+            { label: "越秀区", value: 5, group: "中心城区", columns: ["3", "越秀区", "5"] },
+            { label: "番禺区", value: 4, group: "外围城区", columns: ["4", "番禺区", "4"] },
+            { label: "黄埔区", value: 4, group: "产业城区", columns: ["5", "黄埔区", "4"] },
+            { label: "白云区", value: 3, group: "外围城区", columns: ["6", "白云区", "3"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按企业注册地址归属行政区进行汇总，统计各区企业数量。" },
+            { heading: "二、统计结果", body: "天河区企业数量最多，共9家；海珠区和越秀区位居其后，分别为6家和5家。" },
+            { heading: "三、数据解读", body: "企业分布相对集中在中心城区，后续可结合行业类型、注册资本和成立时间进一步分析区域产业特征。" },
+          ],
+          guesses: [
+            { label: "按区域输出企业明细", body: "可展开每个行政区下的企业名称、法人、注册资本和成立日期，便于核对明细。", chart: "table" },
+            { label: "生成区域占比饼图", body: "可将各区企业数量转为占比，快速查看企业集中区域。", chart: "pie" },
+            { label: "筛选天河区企业", body: "可继续只看天河区企业，并按注册资本、成立日期或行业类型排序。", chart: "table" },
+          ],
+        },
+        {
+          id: "new-registration-trend",
+          title: "近一年新注册企业趋势",
+          keywords: ["近一年", "新注册", "企业", "趋势", "月份", "折线图"],
+          source: "企业注册登记数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:36",
+          chartTitle: "近一年新注册企业月度趋势",
+          defaultChart: "line",
+          tableHeaders: ["序号", "月份", "新注册企业数量（家）"],
+          chartData: [
+            { label: "9月", value: 2, group: "2025", columns: ["1", "2025年9月", "2"] },
+            { label: "10月", value: 3, group: "2025", columns: ["2", "2025年10月", "3"] },
+            { label: "11月", value: 2, group: "2025", columns: ["3", "2025年11月", "2"] },
+            { label: "12月", value: 4, group: "2025", columns: ["4", "2025年12月", "4"] },
+            { label: "1月", value: 3, group: "2026", columns: ["5", "2026年1月", "3"] },
+            { label: "2月", value: 1, group: "2026", columns: ["6", "2026年2月", "1"] },
+            { label: "3月", value: 5, group: "2026", columns: ["7", "2026年3月", "5"] },
+            { label: "4月", value: 4, group: "2026", columns: ["8", "2026年4月", "4"] },
+            { label: "5月", value: 6, group: "2026", columns: ["9", "2026年5月", "6"] },
+            { label: "6月", value: 5, group: "2026", columns: ["10", "2026年6月", "5"] },
+            { label: "7月", value: 4, group: "2026", columns: ["11", "2026年7月", "4"] },
+            { label: "8月", value: 3, group: "2026", columns: ["12", "2026年8月", "3"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按注册或登记日期统计近一年每月新增企业数量。" },
+            { heading: "二、趋势结果", body: "2026年3月至6月新增企业数量相对较高，其中5月达到6家，为当前样例中的峰值月份。" },
+            { heading: "三、数据解读", body: "新注册企业存在阶段性波动，可结合政策、招商活动和行业热度继续分析增长原因。" },
+          ],
+          guesses: [
+            { label: "列出5月新注册企业", body: "可输出5月新增企业名称、法人、注册资本、行业和注册地址，核对峰值月份来源。", chart: "table" },
+            { label: "按季度统计新增企业", body: "可按季度汇总新增企业数量，观察登记高峰是否集中在特定季度。", chart: "bar" },
+            { label: "按行业拆分新增企业", body: "可进一步按制造、服务、科技、贸易等行业拆分新增企业结构。", chart: "pie" },
+          ],
+        },
+        {
+          id: "capital-range-distribution",
+          title: "注册资本区间分布统计",
+          keywords: ["注册资本", "资本", "区间", "分布", "企业", "饼图"],
+          source: "工商注册资本数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:42",
+          chartTitle: "注册资本区间分布统计",
+          defaultChart: "pie",
+          tableHeaders: ["序号", "注册资本区间", "企业数量（家）"],
+          chartData: [
+            { label: "100万以下", value: 5, group: "小微", columns: ["1", "100万以下", "5"] },
+            { label: "100万-500万", value: 7, group: "中小", columns: ["2", "100万-500万", "7"] },
+            { label: "500万-1000万", value: 3, group: "中型", columns: ["3", "500万-1000万", "3"] },
+            { label: "1000万以上", value: 2, group: "大型", columns: ["4", "1000万以上", "2"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按企业注册资本金额划分区间，统计各区间企业数量。" },
+            { heading: "二、统计结果", body: "100万至500万区间企业最多，共7家；100万以下企业5家；1000万以上企业2家。" },
+            { heading: "三、数据解读", body: "当前样例企业以中小注册资本规模为主，注册资本较高的企业数量较少，可继续结合实缴资本和经营状态判断企业实力。" },
+          ],
+          guesses: [
+            { label: "列出1000万以上企业", body: "可输出注册资本1000万以上企业的名称、法人、成立日期和行业，便于重点核对。", chart: "table" },
+            { label: "按所有制看注册资本", body: "可将注册资本区间与所有制类型交叉分析，查看不同所有制企业的资本规模差异。", chart: "bar" },
+            { label: "生成资本规模占比", body: "可用饼图查看各资本区间占比，识别企业规模结构。", chart: "pie" },
+          ],
+        },
+        {
+          id: "legal-person-multi-company",
+          title: "同一法人名下多企业情况",
+          keywords: ["法人", "同一法人", "多企业", "企业数量", "名下", "排查"],
+          source: "法人任职与企业登记数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:46",
+          chartTitle: "同一法人名下企业数量",
+          defaultChart: "table",
+          tableHeaders: ["序号", "法人姓名", "名下企业数量", "主要关联企业", "最高注册资本（元）"],
+          chartData: [
+            { label: "王建国", value: 3, group: "重点关注", columns: ["1", "王建国", "3", "广州佛镁特家居有限公司", "3,000,000.00"] },
+            { label: "陈晓华", value: 2, group: "正常", columns: ["2", "陈晓华", "2", "广州启晟贸易有限公司", "2,000,000.00"] },
+            { label: "孙婉婷", value: 2, group: "正常", columns: ["3", "孙婉婷", "2", "广州市创蔚服装有限公司", "15,000,000.00"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已按法人姓名聚合同名下关联企业数量，筛选名下企业数量大于1家的记录。" },
+            { heading: "二、查询结果", body: "当前共命中3位法人，其中王建国名下关联企业数量最多，为3家。" },
+            { heading: "三、数据解读", body: "同一法人关联多家企业属于常见经营现象，但如果同时存在高频变更、异常经营或地址集中情况，建议进一步穿透核验。" },
+          ],
+          guesses: [
+            { label: "展开法人关联企业明细", body: "可继续列出每位法人名下企业名称、注册日期、注册资本、经营状态和注册地址。", chart: "table" },
+            { label: "按法人企业数量排序", body: "可按名下企业数量降序展示，优先查看关联企业较多的法人。", chart: "bar" },
+            { label: "筛选存在异常经营的企业", body: "可叠加经营状态和异常名录字段，排查多企业关联中的潜在风险。", chart: "table" },
+          ],
+        },
+        {
+          id: "small-staff-industry",
+          title: "人员规模小于10人的企业行业分布",
+          keywords: ["人员规模", "小于10人", "企业", "行业", "分布", "小微"],
+          source: "企业人员规模与行业数据",
+          creator: "问数分析",
+          createdAt: "2026-08-03 10:51",
+          chartTitle: "人员规模小于10人的企业行业分布",
+          defaultChart: "bar",
+          tableHeaders: ["序号", "行业", "企业数量（家）"],
+          chartData: [
+            { label: "批发零售", value: 5, group: "商贸", columns: ["1", "批发零售", "5"] },
+            { label: "居民服务", value: 4, group: "服务", columns: ["2", "居民服务", "4"] },
+            { label: "软件服务", value: 3, group: "科技", columns: ["3", "软件服务", "3"] },
+            { label: "服装制造", value: 3, group: "制造", columns: ["4", "服装制造", "3"] },
+            { label: "建筑装饰", value: 2, group: "建筑", columns: ["5", "建筑装饰", "2"] },
+            { label: "餐饮", value: 2, group: "服务", columns: ["6", "餐饮", "2"] },
+          ],
+          sections: [
+            { heading: "一、查询口径", body: "已筛选人员规模小于10人的企业，并按行业类型汇总企业数量。" },
+            { heading: "二、统计结果", body: "批发零售类企业数量最多，共5家；居民服务类企业4家；软件服务和服装制造各3家。" },
+            { heading: "三、数据解读", body: "小规模企业主要集中在商贸和服务类行业，说明轻资产、低人员配置的经营主体占比较高。" },
+          ],
+          guesses: [
+            { label: "列出小规模企业明细", body: "可输出企业名称、行业、人员规模、法人、注册资本和注册地址，便于进一步筛查。", chart: "table" },
+            { label: "生成行业占比饼图", body: "可用饼图展示小规模企业在各行业中的占比，快速判断行业集中度。", chart: "pie" },
+            { label: "按区域拆分小规模企业", body: "可继续按行政区统计小规模企业数量，判断是否存在区域集中。", chart: "bar" },
+          ],
+        },
+      ];
       window.aiDemoThinkingEnabled = true;
       window.aiDemoThinkingMinMs = 3000;
       window.aiDemoThinkingMaxMs = 6000;
     </script>
-    <script src="./script.js?v=20260728-thinking-36"></script>
+    <script src="./script.js?v=20260803-business-cases"></script>
   </body>
 </html>
