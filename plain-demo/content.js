@@ -11,16 +11,16 @@ window.aiDemoAnswers = [
     displayCharts: ["bar"],
     tableHeaders: ["序号", "区域", "异常企业数量（家）"],
     chartData: [
-      { label: "白云区", value: 7, group: "异常", columns: ["1", "白云区", "7"] },
-      { label: "番禺区", value: 5, group: "异常", columns: ["2", "番禺区", "5"] },
-      { label: "天河区", value: 4, group: "异常", columns: ["3", "天河区", "4"] },
-      { label: "黄埔区", value: 3, group: "异常", columns: ["4", "黄埔区", "3"] },
-      { label: "南沙区", value: 2, group: "异常", columns: ["5", "南沙区", "2"] },
+      { label: "白云区", value: 126, group: "异常", columns: ["1", "白云区", "126"] },
+      { label: "番禺区", value: 54, group: "异常", columns: ["2", "番禺区", "54"] },
+      { label: "天河区", value: 31, group: "异常", columns: ["3", "天河区", "31"] },
+      { label: "黄埔区", value: 12, group: "异常", columns: ["4", "黄埔区", "12"] },
+      { label: "南沙区", value: 4, group: "异常", columns: ["5", "南沙区", "4"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "当前样例库共识别到5个区域存在经营异常企业，其中白云区数量最高，为7家；番禺区次之，为5家。",
+        body: "当前样例库共识别到227家经营异常企业，其中白云区数量最高，为126家；番禺区次之，为54家；南沙区最低，为4家。",
       },
       {
         heading: "二、处理建议",
@@ -49,15 +49,15 @@ window.aiDemoAnswers = [
     displayCharts: ["table"],
     tableHeaders: ["序号", "企业名称", "证照类型", "到期日期", "剩余天数", "责任人"],
     chartData: [
-      { label: "穗安食品贸易有限公司", value: 12, group: "食品经营许可", columns: ["1", "穗安食品贸易有限公司", "食品经营许可", "2026-08-15", "12", "周敏"] },
-      { label: "越海运输服务有限公司", value: 18, group: "道路运输许可", columns: ["2", "越海运输服务有限公司", "道路运输许可", "2026-08-21", "18", "陈浩"] },
-      { label: "南岭医疗器械有限公司", value: 27, group: "器械备案", columns: ["3", "南岭医疗器械有限公司", "器械备案", "2026-08-30", "27", "李珊"] },
-      { label: "东泽广告工程有限公司", value: 41, group: "施工备案", columns: ["4", "东泽广告工程有限公司", "施工备案", "2026-09-13", "41", "王磊"] },
+      { label: "穗安食品贸易有限公司", value: 3, group: "食品经营许可", columns: ["1", "穗安食品贸易有限公司", "食品经营许可", "2026-08-07", "3", "周敏"] },
+      { label: "越海运输服务有限公司", value: 18, group: "道路运输许可", columns: ["2", "越海运输服务有限公司", "道路运输许可", "2026-08-22", "18", "陈浩"] },
+      { label: "南岭医疗器械有限公司", value: 46, group: "器械备案", columns: ["3", "南岭医疗器械有限公司", "器械备案", "2026-09-19", "46", "李珊"] },
+      { label: "东泽广告工程有限公司", value: 92, group: "施工备案", columns: ["4", "东泽广告工程有限公司", "施工备案", "2026-11-04", "92", "王磊"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "当前共有4家企业存在证照即将到期提醒，其中2家企业剩余天数少于20天，需要优先处理。",
+        body: "当前共有4家企业存在证照即将到期提醒，剩余天数从3天到92天差异明显。其中穗安食品贸易有限公司仅剩3天，需要优先处理。",
       },
       {
         heading: "二、处理建议",
@@ -70,7 +70,7 @@ window.aiDemoAnswers = [
     ],
     guesses: [
       { label: "只看20天内到期", body: "20天内到期的企业为穗安食品贸易有限公司和越海运输服务有限公司，建议优先确认续期材料。", chart: "table" },
-      { label: "查看剩余天数柱状图", body: "可按企业查看证照剩余天数，穗安食品贸易有限公司剩余12天，属于最紧急记录。", chart: "bar" },
+      { label: "查看剩余天数柱状图", body: "可按企业查看证照剩余天数，穗安食品贸易有限公司剩余3天，属于最紧急记录。", chart: "bar" },
       { label: "生成续期跟进表", body: "续期跟进表建议包含企业名称、证照类型、到期日期、责任人、材料状态和预计提交日期。", chart: "table" },
     ],
   },
@@ -86,21 +86,21 @@ window.aiDemoAnswers = [
     displayCharts: ["bar"],
     tableHeaders: ["序号", "月份", "法人变更企业数量（家）"],
     chartData: [
-      { label: "9月", value: 1, group: "2025", columns: ["1", "2025年9月", "1"] },
-      { label: "10月", value: 2, group: "2025", columns: ["2", "2025年10月", "2"] },
-      { label: "11月", value: 1, group: "2025", columns: ["3", "2025年11月", "1"] },
-      { label: "12月", value: 3, group: "2025", columns: ["4", "2025年12月", "3"] },
-      { label: "1月", value: 2, group: "2026", columns: ["5", "2026年1月", "2"] },
-      { label: "2月", value: 1, group: "2026", columns: ["6", "2026年2月", "1"] },
-      { label: "3月", value: 4, group: "2026", columns: ["7", "2026年3月", "4"] },
-      { label: "4月", value: 2, group: "2026", columns: ["8", "2026年4月", "2"] },
-      { label: "5月", value: 3, group: "2026", columns: ["9", "2026年5月", "3"] },
-      { label: "6月", value: 2, group: "2026", columns: ["10", "2026年6月", "2"] },
+      { label: "9月", value: 4, group: "2025", columns: ["1", "2025年9月", "4"] },
+      { label: "10月", value: 17, group: "2025", columns: ["2", "2025年10月", "17"] },
+      { label: "11月", value: 6, group: "2025", columns: ["3", "2025年11月", "6"] },
+      { label: "12月", value: 38, group: "2025", columns: ["4", "2025年12月", "38"] },
+      { label: "1月", value: 11, group: "2026", columns: ["5", "2026年1月", "11"] },
+      { label: "2月", value: 3, group: "2026", columns: ["6", "2026年2月", "3"] },
+      { label: "3月", value: 64, group: "2026", columns: ["7", "2026年3月", "64"] },
+      { label: "4月", value: 24, group: "2026", columns: ["8", "2026年4月", "24"] },
+      { label: "5月", value: 41, group: "2026", columns: ["9", "2026年5月", "41"] },
+      { label: "6月", value: 15, group: "2026", columns: ["10", "2026年6月", "15"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "近一年法人变更记录在2026年3月出现小高峰，当月涉及4家企业。整体来看，法人变更呈零散分布。",
+        body: "近一年法人变更记录共223家，2026年3月出现明显高峰，当月涉及64家；2026年2月最低，为3家。",
       },
       {
         heading: "二、核查建议",
@@ -113,8 +113,8 @@ window.aiDemoAnswers = [
     ],
     guesses: [
       { label: "列出3月变更企业", body: "可输出2026年3月法人变更企业的名称、原法人、新法人、变更日期和登记机关。", chart: "table" },
-      { label: "按季度汇总法人变更", body: "可将月度变更数据按季度汇总，查看法人变更是否集中在特定周期。", chart: "bar" },
-      { label: "生成月度占比图", body: "可按月份查看法人变更占比，2026年3月占比最高，2025年9月、11月和2026年2月较低。", chart: "pie" },
+      { label: "按季度汇总法人变更", body: "可将月度变更数据按季度汇总，查看2026年一季度是否明显高于其他周期。", chart: "bar" },
+      { label: "生成月度占比图", body: "可按月份查看法人变更占比，2026年3月最高，2026年2月最低。", chart: "pie" },
     ],
   },
   {
@@ -129,14 +129,14 @@ window.aiDemoAnswers = [
     displayCharts: ["table"],
     tableHeaders: ["序号", "企业名称", "注册资本（元）", "实缴资本（元）", "成立日期", "经营状态"],
     chartData: [
-      { label: "海睿供应链管理有限公司", value: 300, group: "存续", columns: ["1", "海睿供应链管理有限公司", "3,000,000.00", "0.00", "2025-06-19", "存续"] },
-      { label: "广州青禾科技有限公司", value: 200, group: "存续", columns: ["2", "广州青禾科技有限公司", "2,000,000.00", "0.00", "2024-03-12", "存续"] },
-      { label: "穗北文化传媒有限公司", value: 50, group: "存续", columns: ["3", "穗北文化传媒有限公司", "500,000.00", "0.00", "2023-11-08", "存续"] },
+      { label: "海睿供应链管理有限公司", value: 1200, group: "存续", columns: ["1", "海睿供应链管理有限公司", "12,000,000.00", "0.00", "2025-06-19", "存续"] },
+      { label: "广州青禾科技有限公司", value: 450, group: "存续", columns: ["2", "广州青禾科技有限公司", "4,500,000.00", "0.00", "2024-03-12", "存续"] },
+      { label: "穗北文化传媒有限公司", value: 80, group: "存续", columns: ["3", "穗北文化传媒有限公司", "800,000.00", "0.00", "2023-11-08", "存续"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "当前样例库中共有3家企业实缴资本为0，且经营状态均为存续。",
+        body: "当前样例库中共有3家企业实缴资本为0，且经营状态均为存续。注册资本从80万元到1200万元，差异较大。",
       },
       {
         heading: "二、分析说明",
@@ -148,7 +148,7 @@ window.aiDemoAnswers = [
       },
     ],
     guesses: [
-      { label: "按注册资本排序", body: "海睿供应链管理有限公司注册资本最高，为300万元；广州青禾科技有限公司为200万元。", chart: "bar" },
+      { label: "按注册资本排序", body: "海睿供应链管理有限公司注册资本最高，为1200万元；广州青禾科技有限公司为450万元；穗北文化传媒有限公司为80万元。", chart: "bar" },
       { label: "输出资本明细表", body: "资本明细表展示企业名称、注册资本、实缴资本、成立日期和经营状态，可直接核对实缴为0的企业记录。", chart: "table" },
       { label: "筛选成立超过2年", body: "可叠加成立时间条件，优先核查成立较久但实缴仍为0的企业。", chart: "table" },
     ],
@@ -165,16 +165,16 @@ window.aiDemoAnswers = [
     displayCharts: ["pie"],
     tableHeaders: ["序号", "参保人数区间", "企业数量（家）"],
     chartData: [
-      { label: "0人", value: 6, group: "无参保", columns: ["1", "0人", "6"] },
-      { label: "1-5人", value: 8, group: "小规模", columns: ["2", "1-5人", "8"] },
-      { label: "6-20人", value: 5, group: "成长型", columns: ["3", "6-20人", "5"] },
-      { label: "21-50人", value: 2, group: "中型", columns: ["4", "21-50人", "2"] },
-      { label: "50人以上", value: 1, group: "较大规模", columns: ["5", "50人以上", "1"] },
+      { label: "0人", value: 92, group: "无参保", columns: ["1", "0人", "92"] },
+      { label: "1-5人", value: 138, group: "小规模", columns: ["2", "1-5人", "138"] },
+      { label: "6-20人", value: 47, group: "成长型", columns: ["3", "6-20人", "47"] },
+      { label: "21-50人", value: 16, group: "中型", columns: ["4", "21-50人", "16"] },
+      { label: "50人以上", value: 5, group: "较大规模", columns: ["5", "50人以上", "5"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "参保人数集中在1-5人和0人区间，说明样例企业以小规模主体为主。",
+        body: "样例库共统计298家企业，参保人数集中在1-5人和0人区间，其中1-5人区间有138家，50人以上仅5家。",
       },
       {
         heading: "二、数据解读",
@@ -188,7 +188,7 @@ window.aiDemoAnswers = [
     guesses: [
       { label: "列出参保为0企业", body: "可输出参保人数为0的企业名称、行业、注册资本、经营状态和年报年份。", chart: "table" },
       { label: "按行业看参保区间", body: "可将参保人数区间与行业交叉分析，判断小规模主体主要集中在哪些行业。", chart: "bar" },
-      { label: "找出50人以上企业", body: "可单独列出50人以上企业，核对其注册资本、成立年限和所在区域。", chart: "table" },
+      { label: "找出50人以上企业", body: "可单独列出5家50人以上企业，核对其注册资本、成立年限和所在区域。", chart: "table" },
     ],
   },
   {
@@ -203,15 +203,15 @@ window.aiDemoAnswers = [
     displayCharts: ["bar"],
     tableHeaders: ["序号", "注册地址", "企业数量（家）", "主要行业"],
     chartData: [
-      { label: "科汇园A座", value: 12, group: "园区", columns: ["1", "科汇园A座", "12", "科技服务"] },
-      { label: "创智路18号", value: 9, group: "园区", columns: ["2", "创智路18号", "9", "商贸服务"] },
-      { label: "云港大厦", value: 6, group: "写字楼", columns: ["3", "云港大厦", "6", "商务服务"] },
-      { label: "南湾产业园", value: 5, group: "园区", columns: ["4", "南湾产业园", "5", "制造服务"] },
+      { label: "科汇园A座", value: 86, group: "园区", columns: ["1", "科汇园A座", "86", "科技服务"] },
+      { label: "创智路18号", value: 41, group: "园区", columns: ["2", "创智路18号", "41", "商贸服务"] },
+      { label: "云港大厦", value: 17, group: "写字楼", columns: ["3", "云港大厦", "17", "商务服务"] },
+      { label: "南湾产业园", value: 6, group: "园区", columns: ["4", "南湾产业园", "6", "制造服务"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "科汇园A座同地址注册企业数量最高，共12家；创智路18号有9家。",
+        body: "样例库共统计150家同地址注册企业，科汇园A座数量最高，共86家；创智路18号有41家；南湾产业园最低，为6家。",
       },
       {
         heading: "二、核查建议",
@@ -224,7 +224,7 @@ window.aiDemoAnswers = [
     ],
     guesses: [
       { label: "展开科汇园企业明细", body: "可输出科汇园A座下企业名称、法人、行业、注册时间和经营状态。", chart: "table" },
-      { label: "同地址企业占比", body: "可将同地址企业按地址聚合后生成占比图，查看集中程度。", chart: "pie" },
+      { label: "同地址企业占比", body: "可将同地址企业按地址聚合后生成占比图，科汇园A座占比最高。", chart: "pie" },
       { label: "筛选同法人同地址", body: "可叠加法人姓名条件，排查同一法人名下集中注册情况。", chart: "table" },
     ],
   },
@@ -240,15 +240,15 @@ window.aiDemoAnswers = [
     displayCharts: ["bar"],
     tableHeaders: ["序号", "缺失类型", "企业数量（家）"],
     chartData: [
-      { label: "联系电话为空", value: 8, group: "缺失", columns: ["1", "联系电话为空", "8"] },
-      { label: "号码格式错误", value: 3, group: "错误", columns: ["2", "号码格式错误", "3"] },
-      { label: "号码重复", value: 4, group: "重复", columns: ["3", "号码重复", "4"] },
-      { label: "号码停用", value: 2, group: "失效", columns: ["4", "号码停用", "2"] },
+      { label: "联系电话为空", value: 94, group: "缺失", columns: ["1", "联系电话为空", "94"] },
+      { label: "号码格式错误", value: 27, group: "错误", columns: ["2", "号码格式错误", "27"] },
+      { label: "号码重复", value: 46, group: "重复", columns: ["3", "号码重复", "46"] },
+      { label: "号码停用", value: 8, group: "失效", columns: ["4", "号码停用", "8"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "联系电话为空的问题最多，共8家企业；号码重复和格式错误也需要清理。",
+        body: "样例库共统计175条联系方式问题，其中联系电话为空最多，共94条；号码停用最少，为8条。",
       },
       {
         heading: "二、治理建议",
@@ -261,7 +261,7 @@ window.aiDemoAnswers = [
     ],
     guesses: [
       { label: "列出电话为空企业", body: "可输出联系电话为空的企业名称、法人、注册地址、行业和最近更新日期。", chart: "table" },
-      { label: "联系方式质量占比", body: "可按缺失、错误、重复、停用等类型生成占比图，评估数据质量。", chart: "pie" },
+      { label: "联系方式质量占比", body: "可按缺失、错误、重复、停用等类型生成占比图，联系电话为空占比最高。", chart: "pie" },
       { label: "生成联系方式治理表", body: "治理表建议包含企业名称、问题类型、责任人、处理状态和预计完成时间。", chart: "table" },
     ],
   },
@@ -277,16 +277,16 @@ window.aiDemoAnswers = [
     displayCharts: ["pie"],
     tableHeaders: ["序号", "行业", "注销企业数量（家）"],
     chartData: [
-      { label: "批发零售", value: 6, group: "商贸", columns: ["1", "批发零售", "6"] },
-      { label: "餐饮住宿", value: 4, group: "服务", columns: ["2", "餐饮住宿", "4"] },
-      { label: "商务服务", value: 3, group: "服务", columns: ["3", "商务服务", "3"] },
-      { label: "建筑装饰", value: 2, group: "建筑", columns: ["4", "建筑装饰", "2"] },
-      { label: "软件服务", value: 1, group: "科技", columns: ["5", "软件服务", "1"] },
+      { label: "批发零售", value: 82, group: "商贸", columns: ["1", "批发零售", "82"] },
+      { label: "餐饮住宿", value: 37, group: "服务", columns: ["2", "餐饮住宿", "37"] },
+      { label: "商务服务", value: 18, group: "服务", columns: ["3", "商务服务", "18"] },
+      { label: "建筑装饰", value: 7, group: "建筑", columns: ["4", "建筑装饰", "7"] },
+      { label: "软件服务", value: 3, group: "科技", columns: ["5", "软件服务", "3"] },
     ],
     sections: [
       {
         heading: "一、查询结果",
-        body: "已注销企业主要集中在批发零售和餐饮住宿行业，两类合计占比较高。",
+        body: "样例库共统计147家已注销企业，批发零售行业最多，为82家；软件服务最少，为3家。",
       },
       {
         heading: "二、数据解读",
@@ -300,7 +300,7 @@ window.aiDemoAnswers = [
     guesses: [
       { label: "列出批发零售注销企业", body: "可输出批发零售行业已注销企业名称、注销日期、成立年限和法人姓名。", chart: "table" },
       { label: "按成立年限看注销", body: "可按成立1年内、1-3年、3-5年、5年以上统计注销企业数量。", chart: "bar" },
-      { label: "生成行业占比图", body: "可按行业查看已注销企业占比，批发零售和餐饮住宿占比较高。", chart: "pie" },
+      { label: "生成行业占比图", body: "可按行业查看已注销企业占比，批发零售和餐饮住宿占比较高，软件服务占比最低。", chart: "pie" },
     ],
   },
 ];
