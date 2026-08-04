@@ -858,7 +858,7 @@ function renderBarChart(data) {
   `;
 }
 
-function makePoints(data, width = 704, top = 28, bottom = 210) {
+function makePoints(data, width = 704, top = 32, bottom = 210) {
   const max = getMax(data);
   return data.map((item, index) => {
     const x = 38 + index * (width / Math.max(1, data.length - 1));
@@ -867,13 +867,31 @@ function makePoints(data, width = 704, top = 28, bottom = 210) {
   });
 }
 
+function renderSvgYAxis(max, left = 38, right = 748, top = 32, bottom = 210) {
+  const ticks = [1, 0.75, 0.5, 0.25, 0];
+  return `
+    <g class="axis y-axis-svg">
+      <path d="M${left} ${top}V${bottom}H${right}" />
+      ${ticks.map((ratio) => {
+        const y = top + (1 - ratio) * (bottom - top);
+        return `
+          <line x1="${left - 4}" y1="${y.toFixed(1)}" x2="${left}" y2="${y.toFixed(1)}" />
+          <text x="${left - 10}" y="${(y + 4).toFixed(1)}" text-anchor="end">${Math.round(max * ratio)}</text>
+        `;
+      }).join("")}
+    </g>
+  `;
+}
+
 function renderLineChart(data) {
   const points = makePoints(data);
+  const max = getMax(data);
   const path = points.map((point, index) => `${index ? "L" : "M"}${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
   return `
     <div class="line-chart">
       <svg viewBox="0 0 780 250" aria-label="线图">
         <g class="grid"><path d="M38 32H748M38 76H748M38 120H748M38 164H748M38 210H748" /></g>
+        ${renderSvgYAxis(max)}
         <path class="line-path" d="${path}" />
         ${points.map((point) => `<circle class="line-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"><title>${escapeHtml(point.item.label)}：${point.item.value}</title></circle>`).join("")}
         ${points.map((point) => `<text x="${point.x.toFixed(1)}" y="238" text-anchor="middle">${escapeHtml(point.item.label)}</text>`).join("")}
@@ -884,12 +902,14 @@ function renderLineChart(data) {
 
 function renderAreaChart(data) {
   const points = makePoints(data);
+  const max = getMax(data);
   const line = points.map((point, index) => `${index ? "L" : "M"}${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
   const area = `${line} L${points.at(-1).x.toFixed(1)},210 L${points[0].x.toFixed(1)},210 Z`;
   return `
     <div class="line-chart area-chart">
       <svg viewBox="0 0 780 250" aria-label="面积图">
         <g class="grid"><path d="M38 32H748M38 76H748M38 120H748M38 164H748M38 210H748" /></g>
+        ${renderSvgYAxis(max)}
         <path class="area-fill" d="${area}" />
         <path class="line-path" d="${line}" />
         ${points.map((point) => `<circle class="line-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"><title>${escapeHtml(point.item.label)}：${point.item.value}</title></circle>`).join("")}
